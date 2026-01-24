@@ -1,0 +1,42 @@
+.sidenav {
+  width: 240px;
+  background: #18191e;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.menu {
+  flex: 1;
+}
+
+.menu .item {
+  display: block;
+  padding: 12px;
+  color: #cfcfcf;
+  text-decoration: none;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.menu .item.active {
+  background: #ffffff;
+  color: #18191e;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  padding: 10px;
+  text-align: left;
+}

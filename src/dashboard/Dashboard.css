@@ -1,0 +1,403 @@
+/* ===========================
+   BASE RESET
+=========================== */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #f6f2ee;
+  font-family: Inter, system-ui, sans-serif;
+  
+}
+
+/* ===========================
+   LAYOUT
+=========================== */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f6f2ee;
+}
+
+/* ===========================
+   SIDENAV
+=========================== */
+.sidenav {
+position: fixed;        /* 🔥 FIXED */
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;
+  background: #18191e;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.menu {
+  flex: 1;
+}
+
+.menu .item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  color: #cfcfcf;
+  text-decoration: none;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.menu .item.active {
+  background: white;
+  color: #18191e;
+  font-weight: 600;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* ===========================
+   MAIN AREA
+=========================== */
+.dashboard-main {
+  flex: 1;
+  padding: 30px;
+  margin-left: 240px; /* 🔥 offset for fixed sidenav */
+  overflow-y: auto;
+}
+
+.page-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* ===========================
+   TOP STATS
+=========================== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+}
+
+.stat-card p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.stat-card h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.stat-card.dark {
+  background: #18191e;
+  color: white;
+}
+
+.stat-card.dark p {
+  color: #cfcfcf;
+}
+
+/* ===========================
+   MAIN GRID
+=========================== */
+.grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 20px;
+}
+
+.card-box {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #555;
+}
+
+.see-details {
+  cursor: pointer;
+  font-size: 13px;
+  color: #777;
+}
+
+/* ===========================
+   POTS
+=========================== */
+.pots-wrapper {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.pots-total {
+  background: #f6f2ee;
+  padding: 20px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 260px;
+}
+
+.pots-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 2px solid #1f7a6d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #1f7a6d;
+}
+
+.pots-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.pots-amount {
+  font-size: 36px;
+  margin: 4px 0 0;
+}
+
+.pots-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 40px;
+}
+
+.pot-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.pot-bar {
+  width: 4px;
+  height: 42px;
+  border-radius: 6px;
+}
+
+.pot-bar.green { background: #1f7a6d; }
+.pot-bar.blue { background: #7ccad6; }
+.pot-bar.purple { background: #6b7280; }
+.pot-bar.orange { background: #f2b880; }
+
+.pot-item p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.pot-item strong {
+  display: block;
+  font-size: 16px;
+}
+
+/* ===========================
+   TRANSACTIONS
+=========================== */
+.transactions {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.transactions li {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.plus { color: #0f766e; font-weight: 600; }
+.minus { color: #991b1b; font-weight: 600; }
+
+/* ===========================
+   BUDGET
+=========================== */
+.budget-circle {
+  text-align: center;
+  padding: 32px 0;
+  border-radius: 999px;
+  background: #f6f2ee;
+  margin-bottom: 20px;
+}
+
+.budget-circle h2 {
+  margin: 0;
+}
+
+.budget-list,
+.bills {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.budget-list li,
+.bills li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  font-size: 14px;
+}
+
+/* ===========================
+   TABLET (≤1024px)
+=========================== */
+@media (max-width: 1024px) and (min-width: 901px){
+  .sidenav {
+    width: 200px;
+  }
+
+  .dashboard-main {
+    margin-left: 200px; /* 🔥 MATCH SIDENAV */
+    padding: 24px;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+@media (max-width: 900px) and (min-width: 769px) {
+
+  .dashboard-main {
+    margin-left: 200px;
+    padding: 20px;
+  }
+
+  /* Collapse main grid */
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Top cards */
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Pots stack vertically */
+  .pots-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pots-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+/* ===========================
+   MOBILE (≤768px)
+=========================== */
+@media (max-width: 768px) {
+
+  /* Hide sidenav */
+  .sidenav {
+    display: none !important;
+  }
+
+  .dashboard-layout {
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .dashboard-main {
+    margin-left: 0; /* 🔥 RESET */
+    width: 100%;
+    padding: 16px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .page-title {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  /* Top stats */
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  /* Grid */
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Pots */
+  .pots-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pots-total {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .pots-list {
+    grid-template-columns: 1fr;
+  }
+
+  /* Budget */
+  .budget-circle {
+    width: 100%;
+  }
+
+  /* Stop page overflow */
+  html,
+  body {
+    overflow: hidden;
+  }
+}
