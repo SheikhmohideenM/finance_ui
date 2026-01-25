@@ -7,6 +7,7 @@ import ProtectedRoute from './components/protected/ProtectedRoute'
 import SignUp from './components/signup/Signup'
 import Dashboard from './dashboard/dashboard'
 import DashboardLayout from './dashboard/DashboardLayout'
+import Budget from './layout/budget/Budget'
 import Transactions from './transactions/Transactions'
 
 function App() {
@@ -50,7 +51,7 @@ function App() {
           {/* 🔥 ALL THESE SHARE THE SAME SIDENAV */}
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/transactions" element={<Transactions />} />
-          {/* <Route path="/budgets" element={<Budgets />} /> */}
+          <Route path="/budgets" element={<Budget />} />
         </Route>
       </Routes>
     </BrowserRouter>

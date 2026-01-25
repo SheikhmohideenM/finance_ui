@@ -18,7 +18,7 @@ input {
   margin-top: 12px;
 }
 
-button {
+/* button {
   width: 100%;
   margin-top: 15px;
   padding: 10px;
@@ -26,7 +26,7 @@ button {
   color: white;
   border: none;
   cursor: pointer;
-}
+} */
 
 button.logout {
   width: auto;

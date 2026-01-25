@@ -150,3 +150,108 @@
 .paginationBtn {
   color: #000000;
 }
+
+/* ===========================
+   TABLET (≤1024px)
+=========================== */
+@media (max-width: 1024px) {
+  .table-filters {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .filters-right {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .filters-right select {
+    min-width: 160px;
+  }
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+  }
+
+  .pagination {
+    gap: 12px;
+  }
+}
+
+/* ===========================
+   MOBILE (≤768px)
+=========================== */
+@media (max-width: 768px) {
+  .transactions-page {
+    padding: 12px;
+  }
+
+  /* Filters stack */
+  .table-filters {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .table-filters input {
+    width: 100%;
+  }
+
+  .filters-right {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .filters-right select {
+    width: 100%;
+  }
+
+  /* Hide table header */
+  .table-header {
+    display: none;
+  }
+
+  /* Row becomes card */
+  .table-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 14px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+
+  .name {
+    font-weight: 600;
+  }
+
+  .table-row span {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .table-row span::before {
+    content: attr(data-label);
+    font-size: 12px;
+    color: #777;
+  }
+
+  /* Amount stays right */
+  .amount {
+    justify-content: flex-end !important;
+  }
+
+  /* Pagination */
+  .pagination {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .pages {
+    order: 1;
+  }
+
+  .pagination button {
+    width: 100%;
+  }
+}
