@@ -276,6 +276,9 @@
   font-size: 16px;
 }
 
+.see-all {
+  color: #a4a2a2;
+}
 /* ===== LATEST SPENDING ===== */
 .latest {
   background: #f6f2ee;
@@ -360,4 +363,153 @@
 .menu-bar {
   cursor: pointer;
   color: #a4a2a2;
+}
+
+/* ===============================
+   TABLET (≤1024px)
+================================ */
+@media (max-width: 1024px) {
+  .budgets-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .budget-summary-card {
+    max-width: 100%;
+  }
+
+  .budget-categories {
+    gap: 20px;
+  }
+
+  .donut {
+    width: 140px;
+    height: 140px;
+  }
+
+  .donut-center {
+    width: 100px;
+    height: 100px;
+    padding-top: 24px;
+  }
+}
+
+/* ===============================
+   TABLET ONLY – Spending Summary
+   (≤1024px)
+================================ */
+@media (max-width: 1023px) and (min-width: 769px) {
+  /* SUMMARY CARD LAYOUT */
+  .budget-summary-card {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 24px;
+    /* align-items: center; */
+  }
+
+  /* DONUT LEFT */
+  .donut-wrapper {
+    margin-bottom: 0;
+    margin-top: 60px;
+  }
+
+  .donut {
+    width: 160px;
+    height: 160px;
+  }
+
+  .donut-center {
+    width: 110px;
+    height: 110px;
+    padding-top: 28px;
+  }
+
+  /* RIGHT CONTENT */
+  .budget-summary-card h3 {
+    grid-column: 2;
+    margin-bottom: 10px;
+  }
+
+  .summary-list {
+    grid-column: 2;
+    margin-top: -185px;
+  }
+
+  .summary-list li {
+    padding: 12px 0;
+  }
+}
+
+/* ===============================
+   MOBILE (≤768px)
+================================ */
+@media (max-width: 768px) {
+  .budgets-page {
+    padding: 16px;
+  }
+
+  img,
+  .icon.purple {
+    display: none;
+  }
+
+  /* HEADER */
+  .budgets-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .add-budget-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* GRID */
+  .budgets-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* SUMMARY */
+  .donut {
+    width: 120px;
+    height: 120px;
+  }
+
+  .donut-center {
+    width: 90px;
+    height: 90px;
+    padding-top: 20px;
+  }
+
+  .summary-list li {
+    grid-template-columns: 4px 1fr;
+    gap: 10px;
+  }
+
+  .value {
+    grid-column: 2;
+    text-align: left;
+  }
+
+  /* BUDGET CARD */
+  .budget-card {
+    padding: 14px;
+  }
+
+  .budget-stats {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* LATEST */
+  .latest li {
+    /* flex-direction: column; */
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .amount-date {
+    text-align: left;
+  }
 }

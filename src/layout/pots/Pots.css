@@ -1,0 +1,164 @@
+.pots-page {
+  padding: 24px;
+}
+
+/* HEADER */
+.pots-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.pots-header h1 {
+  font-size: 22px;
+}
+
+.add-pot-btn {
+  background: #18191e;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* GRID */
+.pots-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* CARD */
+.pot-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+/* CARD HEADER */
+.pot-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.pot-card-header .title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.menu {
+  cursor: pointer;
+  color: #999;
+}
+
+/* LABEL */
+.label {
+  font-size: 12px;
+  color: #777;
+}
+
+.amount {
+  margin: 4px 0 14px;
+  font-size: 20px;
+}
+
+/* PROGRESS */
+.progress-wrapper {
+  margin-bottom: 16px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #f3efe9;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #777;
+  margin-top: 6px;
+}
+
+/* ACTIONS */
+.pot-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.secondary {
+  flex: 1;
+  background: #f6f2ee;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* COLORS */
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.green {
+  background: #1f7a6d;
+}
+.blue {
+  background: #7ccad6;
+}
+.orange {
+  background: #f2b880;
+}
+.purple {
+  background: #7c5fcf;
+}
+.gray {
+  background: #6b7280;
+}
+
+.progress-fill.green {
+  background: #1f7a6d;
+}
+.progress-fill.blue {
+  background: #7ccad6;
+}
+.progress-fill.orange {
+  background: #f2b880;
+}
+.progress-fill.purple {
+  background: #7c5fcf;
+}
+.progress-fill.gray {
+  background: #6b7280;
+}
+
+.secondary:hover {
+  background-color: rgb(3, 3, 3);
+  color: #fff;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+@media (max-width: 1024px) {
+  .pots-grid {
+    grid-template-columns: 1fr;
+  }
+}

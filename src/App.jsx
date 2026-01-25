@@ -8,6 +8,7 @@ import SignUp from './components/signup/Signup'
 import Dashboard from './dashboard/dashboard'
 import DashboardLayout from './dashboard/DashboardLayout'
 import Budget from './layout/budget/Budget'
+import Pots from './layout/pots/Pots'
 import Transactions from './transactions/Transactions'
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/budgets" element={<Budget />} />
+          <Route path="/pots" element={<Pots />} />
         </Route>
       </Routes>
     </BrowserRouter>
