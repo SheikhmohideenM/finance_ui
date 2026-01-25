@@ -98,49 +98,87 @@ export default function Budgets() {
   )
 }
 
-/* CATEGORY CARD */
 function BudgetCard({ title, color, max, spent, remaining }) {
   return (
     <div className="budget-card">
+      {/* HEADER */}
       <div className="budget-card-header">
         <div className="title">
           <span className={`dot ${color}`}></span>
           {title}
         </div>
-        <span className="menu">•••</span>
+        <span className="menu-bar">•••</span>
       </div>
 
       <p className="max-text">Maximum of {max}</p>
 
+      {/* PROGRESS */}
       <div className="progress-bar">
-        <div className={`progress-fill ${color}`}></div>
+        <div className={`progress-fill ${color}`} />
       </div>
 
+      {/* STATS */}
       <div className="budget-stats">
-        <div>
-          <p>Spent</p>
-          <strong>{spent}</strong>
+        <div className="stat">
+          {/* <span className="stat-bar green" /> */}
+          <span className={`stat-bar ${color}`} />
+          <div>
+            <p>Spent</p>
+            <strong>{spent}</strong>
+          </div>
         </div>
-        <div>
-          <p>Remaining</p>
-          <strong>{remaining}</strong>
+
+        <div className="stat">
+          <span className="stat-bar light" />
+          <div>
+            <p>Remaining</p>
+            <strong>{remaining}</strong>
+          </div>
         </div>
       </div>
 
+      {/* LATEST SPENDING */}
       <div className="latest">
         <div className="latest-header">
           <h4>Latest Spending</h4>
-          <span className="see-all">See All →</span>
+          <span className="see-all">See All ▶</span>
         </div>
 
         <ul>
           <li>
-            <span>James Thompson</span>
-            <strong>-$5.00</strong>
+            <div className="user">
+              <img src="https://i.pravatar.cc/40?img=12" alt="" />
+              <span>James Thompson</span>
+            </div>
+
+            <div className="amount-date">
+              <strong>- $5.00</strong>
+              <small>11 Aug 2024</small>
+            </div>
           </li>
+
           <li>
-            <span>Pixel Playground</span>
-            <strong>-$10.00</strong>
+            <div className="user">
+              <div className="icon purple">✈</div>
+              <span>Pixel Playground</span>
+            </div>
+
+            <div className="amount-date">
+              <strong>- $10.00</strong>
+              <small>11 Aug 2024</small>
+            </div>
+          </li>
+
+          <li>
+            <div className="user">
+              <img src="https://i.pravatar.cc/40?img=32" alt="" />
+              <span>Rina Sato</span>
+            </div>
+
+            <div className="amount-date">
+              <strong>- $10.00</strong>
+              <small>13 Jul 2024</small>
+            </div>
           </li>
         </ul>
       </div>
