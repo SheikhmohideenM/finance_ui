@@ -1,0 +1,152 @@
+.transactions-page {
+  padding: 20px;
+}
+
+.table-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+/* FILTER BAR */
+.table-filters {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.table-filters input {
+  width: 260px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.filters-right {
+  display: flex;
+  gap: 10px;
+}
+
+.filters-right select {
+  padding: 8px 20px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.dropdownStyle {
+  margin: 10px;
+}
+
+/* TABLE HEADER */
+.table-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  font-size: 13px;
+  color: #777;
+  padding-bottom: 10px;
+}
+
+/* TABLE ROW */
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  align-items: center;
+  padding: 14px 0;
+  border-top: 1px solid #f0f0f0;
+  font-size: 14px;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  background: #d6b26e;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* AMOUNT */
+.amount,
+.amount-col {
+  text-align: right;
+  font-weight: 600;
+}
+
+.plus {
+  color: #0f766e;
+}
+
+.minus {
+  color: #b91c1c;
+}
+
+/* PAGINATION WRAPPER */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 28px;
+}
+
+/* PREV / NEXT BUTTONS */
+.pagination button {
+  min-width: 90px;
+  height: 42px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* DISABLED STATE */
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* PAGE NUMBERS */
+.pages {
+  display: flex;
+  gap: 8px;
+}
+
+.pages span {
+  width: 35px;
+  height: 35px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* ACTIVE PAGE */
+.pages .active {
+  background: #18191e;
+  color: #fff;
+  border-color: #18191e;
+}
+
+.paginationBtn {
+  color: #000000;
+}

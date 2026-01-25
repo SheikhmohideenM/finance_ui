@@ -1,5 +1,13 @@
 import '../shared/SideNav.css';
 
+import { BiLogOutCircle } from 'react-icons/bi';
+import {
+  FiDollarSign,
+  FiFileText,
+  FiHome,
+  FiPieChart,
+  FiRepeat,
+} from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 
 export default function SideNav({ onLogout }) {
@@ -9,29 +17,36 @@ export default function SideNav({ onLogout }) {
 
       <nav className="menu">
         <NavLink to="/dashboard" className="item">
-          Overview
+          <FiHome />
+          <span>Overview</span>
         </NavLink>
 
         <NavLink to="/transactions" className="item">
-          Transactions
+          <FiRepeat />
+          <span>Transactions</span>
         </NavLink>
 
         <NavLink to="/budgets" className="item">
-          Budgets
+          <FiPieChart />
+          <span>Budgets</span>
         </NavLink>
 
         <NavLink to="/pots" className="item">
-          Pots
+          <FiDollarSign />
+          <span>Pots</span>
         </NavLink>
 
         <NavLink to="/recurring" className="item">
-          Recurring Bills
+          <FiFileText />
+          <span>Recurring Bills</span>
         </NavLink>
-      </nav>
 
-      <button className="logout-btn" onClick={onLogout}>
+        <button className="logout-btn item" onClick={onLogout}>
+        <BiLogOutCircle className='logout' />
         Logout
-      </button>
+        </button>
+      </nav>
+      
     </aside>
   );
 }

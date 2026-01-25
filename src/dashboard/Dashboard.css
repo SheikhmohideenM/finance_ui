@@ -283,6 +283,65 @@ position: fixed;        /* 🔥 FIXED */
   font-size: 14px;
 }
 
+.budget-chart-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0 24px;
+}
+
+.budget-chart {
+  transform: rotate(-90deg);
+}
+
+.budget-chart circle {
+  stroke-linecap: round;
+}
+
+/* CENTER TEXT */
+.budget-center {
+  position: absolute;
+  text-align: center;
+}
+
+.budget-center h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.budget-center p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #666;
+}
+
+/* BUDGET LIST */
+.budget-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.budget-list span {
+  flex: 1;
+}
+
+.budget-indicator {
+  width: 4px;
+  height: 42px;
+  border-radius: 6px;
+  margin-right: 14px;
+}
+
+.budget-indicator.green { background: #1f7a6d; }
+.budget-indicator.blue { background: #7ccad6; }
+.budget-indicator.orange { background: #f2b880; }
+.budget-indicator.purple { background: #6b7280; }
+
+
 /* ===========================
    TABLET (≤1024px)
 =========================== */

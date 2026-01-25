@@ -1,42 +1,89 @@
 .sidenav {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 240px;
+  height: 100vh;
   background: #18191e;
-  color: white;
+  color: #e5e5e5;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 24px 16px;
+  z-index: 100;
 }
 
+/* LOGO */
 .logo {
   font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 30px;
+  font-weight: 700;
+  margin-bottom: 32px;
+  padding-left: 12px;
 }
 
+/* MENU */
 .menu {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
+/* ITEM */
 .menu .item {
-  display: block;
-  padding: 12px;
-  color: #cfcfcf;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: #9ca3af;
   text-decoration: none;
-  border-radius: 8px;
-  margin-bottom: 6px;
-  font-size: 14px;
+  font-size: 15px;
+  transition: all 0.25s ease;
 }
 
+/* ICON */
+.menu .item svg {
+  font-size: 18px;
+}
+
+/* HOVER */
+.menu .item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+/* ACTIVE STATE */
 .menu .item.active {
-  background: #ffffff;
+  background: #f6f2ee;
   color: #18191e;
+  font-weight: 600;
 }
 
+/* LEFT INDICATOR BAR */
+.menu .item.active::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 32px;
+  background: #2dd4bf;
+  border-radius: 6px;
+}
+
+/* LOGOUT */
 .logout-btn {
   background: none;
   border: none;
-  color: #aaa;
-  cursor: pointer;
-  padding: 10px;
+  color: #9ca3af;
+  padding: 12px;
   text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.logout-btn:hover {
+  color: #ffffff;
 }
