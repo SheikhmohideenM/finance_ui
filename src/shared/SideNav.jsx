@@ -36,7 +36,7 @@ export default function SideNav({ onLogout }) {
           <span>Pots</span>
         </NavLink>
 
-        <NavLink to="/recurring" className="item">
+        <NavLink to="/recurringBills" className="item">
           <FiFileText />
           <span>Recurring Bills</span>
         </NavLink>

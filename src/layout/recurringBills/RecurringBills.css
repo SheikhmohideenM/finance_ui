@@ -1,0 +1,278 @@
+.bills-page {
+  padding: 24px;
+}
+
+.page-title {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+/* ================= TOTAL BILLS CARD ================= */
+.total-bills-card {
+  background: linear-gradient(180deg, #1f2026, #18191e);
+  border-radius: 16px;
+  padding: 20px;
+  color: #fff;
+}
+
+.bill-icon-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  font-size: 18px;
+}
+
+.total-bills-card p {
+  font-size: 13px;
+  opacity: 0.8;
+  margin: 0;
+}
+
+.total-bills-card h2 {
+  margin: 6px 0 0;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+/* LAYOUT */
+.bills-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+
+  align-items: start;
+}
+
+/* SUMMARY */
+.bills-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.summary-card {
+  background: #18191e;
+  color: #fff;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.summary-card p {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.summary-details {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary-details div {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.summary-details .danger strong {
+  color: #b91c1c;
+}
+
+/* TABLE CARD */
+.bills-table-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+/* FILTERS */
+.bills-filters {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.bills-filters input {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  width: 220px;
+}
+
+.bills-filters select {
+  padding: 6px 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+/* HEADER */
+.bills-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  font-size: 13px;
+  color: #777;
+  padding-bottom: 10px;
+}
+
+/* ROW */
+.bill-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  align-items: center;
+  padding: 14px 0;
+  border-top: 1px solid #f0f0f0;
+}
+
+.bill-left {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.bill-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f6f2ee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bill-name {
+  font-weight: 600;
+}
+
+.bill-cycle {
+  font-size: 12px;
+  color: #777;
+}
+
+/* STATUS */
+.bill-status {
+  font-size: 12px;
+}
+
+.bill-status.paid {
+  color: #0f766e;
+}
+
+.bill-status.due {
+  color: #b91c1c;
+}
+
+/* AMOUNT */
+.bill-amount {
+  text-align: right;
+  font-weight: 600;
+}
+
+.bill-amount.due {
+  color: #b91c1c;
+}
+
+/* ================= SUMMARY BOX ================= */
+.summary-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px;
+  margin-top: 16px;
+}
+
+.summary-box h3 {
+  margin: 0 0 14px;
+  font-size: 16px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 10px 0;
+}
+
+.summary-row strong {
+  font-weight: 600;
+}
+
+.summary-row.danger {
+  color: #b91c1c;
+}
+
+.divider {
+  height: 1px;
+  background: #eee;
+}
+
+/* ===================== TABLET ===================== */
+@media (max-width: 1024px) {
+  .bills-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* .bills-summary {
+    flex-direction: row;
+    gap: 16px;
+  } */
+
+  .summary-card,
+  .summary-details {
+    flex: 1;
+  }
+
+  .bills-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .summary-box {
+    margin-top: 0;
+  }
+}
+
+/* ===================== MOBILE ===================== */
+@media (max-width: 768px) {
+  .bills-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .bills-header {
+    display: none;
+  }
+
+  .bill-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .bill-amount {
+    text-align: left;
+  }
+
+  .bills-filters {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .bills-filters input {
+    width: 100%;
+  }
+
+  .bills-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .bills-summary {
+    display: flex;
+    flex-direction: column;
+  }
+}

@@ -9,6 +9,7 @@ import Dashboard from './dashboard/dashboard'
 import DashboardLayout from './dashboard/DashboardLayout'
 import Budget from './layout/budget/Budget'
 import Pots from './layout/pots/Pots'
+import RecurringBills from './layout/recurringBills/RecurringBills'
 import Transactions from './transactions/Transactions'
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/budgets" element={<Budget />} />
           <Route path="/pots" element={<Pots />} />
+          <Route path="/recurringBills" element={<RecurringBills />} />
         </Route>
       </Routes>
     </BrowserRouter>
