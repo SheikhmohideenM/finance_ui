@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/set-state-in-effect */
+
 import '../budget/Budget.css'
 
-/* eslint-disable react-hooks/set-state-in-effect */
 import { React, useEffect, useRef, useState } from 'react'
 
 import CheckIcon from '@mui/icons-material/Check'
@@ -177,7 +178,10 @@ export default function Budgets() {
       {/* ===== ADD BUDGET MODAL ===== */}
       <Dialog
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={(event, reason) => {
+          if (reason === 'backdropClick') return
+          setOpen(false)
+        }}
         maxWidth="sm"
         fullWidth
         BackdropProps={{
@@ -294,7 +298,10 @@ export default function Budgets() {
       {/* ===== EDIT BUDGET MODAL ===== */}
       <Dialog
         open={editOpen}
-        onClose={() => setEditOpen(false)}
+        onClose={(event, reason) => {
+          if (reason === 'backdropClick') return
+          setEditOpen(false)
+        }}
         maxWidth="sm"
         fullWidth
         BackdropProps={{
@@ -411,7 +418,10 @@ export default function Budgets() {
       {/* ================= DELETE MODAL ================= */}
       <Dialog
         open={deleteOpen}
-        onClose={() => setDeleteOpen(false)}
+        onClose={(event, reason) => {
+          if (reason === 'backdropClick') return
+          setDeleteOpen(false)
+        }}
         BackdropProps={{
           sx: {
             backgroundColor: 'rgba(0,0,0,0.45)',

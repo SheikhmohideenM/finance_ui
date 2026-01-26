@@ -122,7 +122,10 @@ export default function Pots() {
       {/* ===== ADD POT MODAL ===== */}
       <Dialog
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={(event, reason) => {
+          if (reason === 'backdropClick') return
+          setOpen(false)
+        }}
         maxWidth="sm"
         fullWidth
         BackdropProps={{
@@ -233,7 +236,10 @@ export default function Pots() {
       {/* ===== EDIT POT MODAL ===== */}
       <Dialog
         open={editOpen}
-        onClose={() => setEditOpen(false)}
+        onClose={(event, reason) => {
+          if (reason === 'backdropClick') return
+          setEditOpen(false)
+        }}
         maxWidth="sm"
         fullWidth
         BackdropProps={{
@@ -345,7 +351,10 @@ export default function Pots() {
       {/* ===== DELETE POT MODAL ===== */}
       <Dialog
         open={deleteOpen}
-        onClose={() => setDeleteOpen(false)}
+        onClose={(event, reason) => {
+          if (reason === 'backdropClick') return
+          setDeleteOpen(false)
+        }}
         BackdropProps={{
           sx: {
             backgroundColor: 'rgba(0,0,0,0.45)',
@@ -490,7 +499,10 @@ function PotCard({ title, color, saved, target, percent, onEdit, onDelete }) {
       {/* ===== ADD POT MONEY MODAL ===== */}
       <Dialog
         open={addMoney}
-        onClose={() => setAddMoney(false)}
+        onClose={(event, reason) => {
+          if (reason === 'backdropClick') return
+          setAddMoney(false)
+        }}
         BackdropProps={{
           sx: {
             backgroundColor: 'rgba(0,0,0,0.45)',
@@ -516,9 +528,9 @@ function PotCard({ title, color, saved, target, percent, onEdit, onDelete }) {
           </div>
 
           <p className="pot-modal-desc">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-            hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque,
-            aliquet.
+            Add money to your pot to keep it separate from your main balance. As
+            soon as you add this money, it will be deducted from your current
+            balance.
           </p>
 
           {/* ===== CURRENT STATUS ===== */}
@@ -576,7 +588,10 @@ function PotCard({ title, color, saved, target, percent, onEdit, onDelete }) {
       {/* ===== WITHDRAW MONEY MODAL ===== */}
       <Dialog
         open={withdraw}
-        onClose={() => setWithdraw(false)}
+        onClose={(event, reason) => {
+          if (reason === 'backdropClick') return
+          setWithdraw(false)
+        }}
         BackdropProps={{
           sx: {
             backgroundColor: 'rgba(0,0,0,0.45)',
@@ -602,9 +617,8 @@ function PotCard({ title, color, saved, target, percent, onEdit, onDelete }) {
           </div>
 
           <p className="pot-modal-desc">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-            hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque,
-            aliquet.
+            Withdraw from your pot to put money back in your main balance. This
+            will reduce the amount you have in this pot.
           </p>
 
           {/* ===== CURRENT STATUS ===== */}
