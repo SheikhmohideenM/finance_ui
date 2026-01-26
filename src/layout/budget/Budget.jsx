@@ -35,10 +35,6 @@ export default function Budgets() {
     setOpen(true)
   }
 
-  const handleClickEditOpen = () => {
-    setEditOpen(true)
-  }
-
   const CATEGORY_OPTIONS = [
     { value: 'entertainment', label: 'Entertainment' },
     { value: 'bills', label: 'Bills' },
