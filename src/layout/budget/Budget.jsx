@@ -199,7 +199,7 @@ export default function Budgets() {
       >
         <div className="budget-modal">
           <div className="budget-modal-header">
-            <h3>Add New Budget</h3>
+            <h2>Add New Budget</h2>
             <IconButton onClick={() => setOpen(false)}>
               <CloseIcon />
             </IconButton>
@@ -313,7 +313,7 @@ export default function Budgets() {
       >
         <div className="budget-modal">
           <div className="budget-modal-header">
-            <h3>Edit Budget</h3>
+            <h2>Edit Budget</h2>
             <IconButton onClick={() => setEditOpen(false)}>
               <CloseIcon />
             </IconButton>
@@ -410,46 +410,62 @@ export default function Budgets() {
       <Dialog
         open={deleteOpen}
         onClose={() => setDeleteOpen(false)}
-        maxWidth="xs"
-        fullWidth
         BackdropProps={{
           sx: {
             backgroundColor: 'rgba(0,0,0,0.45)',
             backdropFilter: 'blur(2px)',
           },
         }}
-        PaperProps={{ sx: { borderRadius: 2, textAlign: 'center', p: 2 } }}
+        PaperProps={{
+          sx: {
+            width: { xs: '90%', sm: '480px' },
+            maxWidth: '480px',
+            borderRadius: '14px',
+          },
+        }}
       >
-        <h3>Delete ‘{selectedBudget?.title}’?</h3>
+        <div className="budget-modal">
+          <div className="budget-delete-modal-header">
+            <h2>Delete ‘{selectedBudget?.title}’?</h2>
+            <IconButton onClick={() => setDeleteOpen(false)}>
+              <CloseIcon />
+            </IconButton>
+          </div>
 
-        <p className="delete-desc">
-          Are you sure you want to delete this budget? This action cannot be
-          reversed.
-        </p>
+          <p className="budget-delete-modal-desc">
+            Are you sure you want to delete this budget? This action cannot be
+            reversed, and all the data inside it will be removed forever. Yes,
+            Confirm Deletion
+          </p>
 
-        <Button
-          fullWidth
-          sx={{
-            background: '#c0392b',
-            color: '#fff',
-            '&:hover': { background: '#a93226' },
-            mt: 2,
-            textTransform: 'none',
-          }}
-        >
-          Yes, Confirm Deletion
-        </Button>
+          <DialogContent>
+            <div className="budget-delete-form">
+              <Button
+                fullWidth
+                sx={{
+                  background: '#c0392b',
+                  color: '#fff',
+                  '&:hover': { background: '#a93226' },
+                  mt: 2,
+                  textTransform: 'none',
+                }}
+              >
+                Yes, Confirm Deletion
+              </Button>
 
-        <Button
-          fullWidth
-          variant="text"
-          onClick={() => setDeleteOpen(false)}
-          sx={{
-            textTransform: 'none',
-          }}
-        >
-          No, Go Back
-        </Button>
+              <Button
+                fullWidth
+                variant="text"
+                onClick={() => setDeleteOpen(false)}
+                sx={{
+                  textTransform: 'none',
+                }}
+              >
+                No, Go Back
+              </Button>
+            </div>
+          </DialogContent>
+        </div>
       </Dialog>
     </div>
   )

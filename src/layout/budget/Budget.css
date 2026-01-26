@@ -497,6 +497,12 @@
   align-items: center;
 }
 
+.budget-delete-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .budget-modal-header h3 {
   margin: 0;
   font-size: 18px;
@@ -509,10 +515,29 @@
   margin: 8px 0 18px;
 }
 
+.budget-delete-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.budget-delete-modal-desc {
+  font-size: 13px;
+  color: #777;
+  margin: 8px 0 18px;
+}
+
 .budget-form {
   display: flex;
   flex-direction: column;
   gap: 14px;
+}
+
+.budget-delete-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: -35px;
 }
 
 .budget-form label {
