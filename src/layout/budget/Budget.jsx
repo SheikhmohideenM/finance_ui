@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import '../budget/Budget.css'
 
 /* eslint-disable react-hooks/set-state-in-effect */
@@ -19,6 +20,11 @@ import InputAdornment from '@mui/material/InputAdornment'
 
 export default function Budgets() {
   const [open, setOpen] = useState(false)
+  const [editOpen, setEditOpen] = useState(false)
+  const [deleteOpen, setDeleteOpen] = useState(false)
+
+  const [selectedBudget, setSelectedBudget] = useState(null)
+
   const [form, setForm] = useState({
     category: 'entertainment',
     limit: '',
@@ -27,6 +33,10 @@ export default function Budgets() {
 
   const handleClickOpen = () => {
     setOpen(true)
+  }
+
+  const handleClickEditOpen = () => {
+    setEditOpen(true)
   }
 
   const CATEGORY_OPTIONS = [
@@ -56,6 +66,41 @@ export default function Budgets() {
     { value: 'gold', label: 'Gold', color: '#d4af37' },
     { value: 'orange', label: 'Orange', color: '#f2994a' },
   ]
+
+  const [budgets, setBudgets] = useState([
+    {
+      id: 1,
+      title: 'Entertainment',
+      category: 'entertainment',
+      color: 'green',
+      max: 50,
+      spent: 15,
+    },
+    {
+      id: 2,
+      title: 'Bills',
+      category: 'bills',
+      color: 'blue',
+      max: 750,
+      spent: 150,
+    },
+    {
+      id: 3,
+      title: 'Dining Out',
+      category: 'diningOut',
+      color: 'orange',
+      max: 150,
+      spent: 138,
+    },
+    {
+      id: 4,
+      title: 'Personal Care',
+      category: 'personalCare',
+      color: 'purple',
+      max: 50,
+      spent: 40,
+    },
+  ])
 
   return (
     <div className="budgets-page">
@@ -112,38 +157,28 @@ export default function Budgets() {
         </div>
 
         <div className="budget-categories">
-          <BudgetCard
-            title="Entertainment"
-            color="green"
-            max="$50.00"
-            spent="$15.00"
-            remaining="$35.00"
-          />
-          <BudgetCard
-            title="Bills"
-            color="blue"
-            max="$750.00"
-            spent="$150.00"
-            remaining="$600.00"
-          />
-          <BudgetCard
-            title="Dining Out"
-            color="orange"
-            max="$150.00"
-            spent="$138.00"
-            remaining="$12.00"
-          />
-          <BudgetCard
-            title="Personal Care"
-            color="purple"
-            max="$50.00"
-            spent="$40.00"
-            remaining="$10.00"
-          />
+          {budgets.map((budget) => (
+            <BudgetCard
+              key={budget.id}
+              title={budget.title}
+              color={budget.color}
+              max={`$${budget.max.toFixed(2)}`}
+              spent={`$${budget.spent.toFixed(2)}`}
+              remaining={`$${(budget.max - budget.spent).toFixed(2)}`}
+              onEdit={() => {
+                setSelectedBudget(budget)
+                setEditOpen(true)
+              }}
+              onDelete={() => {
+                setSelectedBudget(budget)
+                setDeleteOpen(true)
+              }}
+            />
+          ))}
         </div>
       </div>
 
-      {/* ===== MODAL ===== */}
+      {/* ===== ADD BUDGET MODAL ===== */}
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
@@ -256,11 +291,171 @@ export default function Budgets() {
           </DialogContent>
         </div>
       </Dialog>
+
+      {/* ===== EDIT BUDGET MODAL ===== */}
+      <Dialog
+        open={editOpen}
+        onClose={() => setEditOpen(false)}
+        maxWidth="sm"
+        fullWidth
+        BackdropProps={{
+          sx: {
+            backgroundColor: 'rgba(0,0,0,0.45)',
+            backdropFilter: 'blur(2px)',
+          },
+        }}
+        PaperProps={{
+          sx: {
+            borderRadius: '14px',
+            padding: '10px',
+          },
+        }}
+      >
+        <div className="budget-modal">
+          <div className="budget-modal-header">
+            <h3>Edit Budget</h3>
+            <IconButton onClick={() => setEditOpen(false)}>
+              <CloseIcon />
+            </IconButton>
+          </div>
+
+          <p className="budget-modal-desc">
+            As your budgets change, feel free to update your spending limits.
+          </p>
+
+          <DialogContent>
+            <div className="budget-form">
+              <label>Budget Category</label>
+              <TextField
+                select
+                fullWidth
+                size="small"
+                value={form?.category || ''}
+                onChange={(e) => setForm({ ...form, category: e.target.value })}
+              >
+                {CATEGORY_OPTIONS.map((o) => (
+                  <MenuItem key={o.value} value={o.value}>
+                    {o.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+
+              <label>Maximum Spending</label>
+              <TextField
+                fullWidth
+                size="small"
+                type="number"
+                value={form?.limit || ''}
+                onChange={(e) => setForm({ ...form, limit: e.target.value })}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">$</InputAdornment>
+                  ),
+                }}
+              />
+
+              <label>Color Tag</label>
+              <TextField
+                select
+                fullWidth
+                size="small"
+                value={form?.theme || ''}
+                onChange={(e) => setForm({ ...form, theme: e.target.value })}
+              >
+                {COLOR_OPTIONS.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        width: '100%',
+                      }}
+                    >
+                      <Box
+                        sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}
+                      >
+                        <Box
+                          sx={{
+                            width: 12,
+                            height: 12,
+                            borderRadius: '50%',
+                            backgroundColor: option.color,
+                          }}
+                        />
+                        <Typography fontSize={14}>{option.label}</Typography>
+                      </Box>
+
+                      {form.theme === option.value && (
+                        <CheckIcon fontSize="small" sx={{ color: '#1f7a6d' }} />
+                      )}
+                    </Box>
+                  </MenuItem>
+                ))}
+              </TextField>
+
+              <Button
+                variant="contained"
+                className="submit-budget-btn"
+                fullWidth
+              >
+                Edit Budget
+              </Button>
+            </div>
+          </DialogContent>
+        </div>
+      </Dialog>
+
+      {/* ================= DELETE MODAL ================= */}
+      <Dialog
+        open={deleteOpen}
+        onClose={() => setDeleteOpen(false)}
+        maxWidth="xs"
+        fullWidth
+        BackdropProps={{
+          sx: {
+            backgroundColor: 'rgba(0,0,0,0.45)',
+            backdropFilter: 'blur(2px)',
+          },
+        }}
+        PaperProps={{ sx: { borderRadius: 2, textAlign: 'center', p: 2 } }}
+      >
+        <h3>Delete ‘{selectedBudget?.title}’?</h3>
+
+        <p className="delete-desc">
+          Are you sure you want to delete this budget? This action cannot be
+          reversed.
+        </p>
+
+        <Button
+          fullWidth
+          sx={{
+            background: '#c0392b',
+            color: '#fff',
+            '&:hover': { background: '#a93226' },
+            mt: 2,
+            textTransform: 'none',
+          }}
+        >
+          Yes, Confirm Deletion
+        </Button>
+
+        <Button
+          fullWidth
+          variant="text"
+          onClick={() => setDeleteOpen(false)}
+          sx={{
+            textTransform: 'none',
+          }}
+        >
+          No, Go Back
+        </Button>
+      </Dialog>
     </div>
   )
 }
 
-function BudgetCard({ title, color, max, spent, remaining }) {
+function BudgetCard({ title, color, max, spent, remaining, onEdit, onDelete }) {
   const [openMenu, setOpenMenu] = useState(false)
   const menuRef = useRef(null)
 
@@ -289,8 +484,12 @@ function BudgetCard({ title, color, max, spent, remaining }) {
 
           {openMenu && (
             <div className="menu-dropdown">
-              <div className="menu-item">✏️ Edit Budget</div>
-              <div className="menu-item danger">🗑 Delete Budget</div>
+              <div className="menu-item" onClick={onEdit}>
+                ✏️ Edit Budget
+              </div>
+              <div className="menu-item danger" onClick={onDelete}>
+                🗑 Delete Budget
+              </div>
             </div>
           )}
         </div>
