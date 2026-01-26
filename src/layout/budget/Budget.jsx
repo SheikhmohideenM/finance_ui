@@ -199,7 +199,7 @@ export default function Budgets() {
       >
         <div className="budget-modal">
           <div className="budget-modal-header">
-            <h2>Add New Budget</h2>
+            <h3>Add New Budget</h3>
             <IconButton onClick={() => setOpen(false)}>
               <CloseIcon />
             </IconButton>
@@ -284,6 +284,9 @@ export default function Budgets() {
                 variant="contained"
                 className="submit-budget-btn"
                 fullWidth
+                sx={{
+                  textTransform: 'none',
+                }}
               >
                 Add Budget
               </Button>
@@ -313,7 +316,7 @@ export default function Budgets() {
       >
         <div className="budget-modal">
           <div className="budget-modal-header">
-            <h2>Edit Budget</h2>
+            <h3>Edit Budget</h3>
             <IconButton onClick={() => setEditOpen(false)}>
               <CloseIcon />
             </IconButton>
@@ -398,8 +401,11 @@ export default function Budgets() {
                 variant="contained"
                 className="submit-budget-btn"
                 fullWidth
+                sx={{
+                  textTransform: 'none',
+                }}
               >
-                Edit Budget
+                Save Changes
               </Button>
             </div>
           </DialogContent>
