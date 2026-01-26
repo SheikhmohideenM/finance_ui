@@ -1,42 +1,64 @@
 import '../budget/Budget.css'
 
 /* eslint-disable react-hooks/set-state-in-effect */
-import React from 'react'
+import { React, useEffect, useRef, useState } from 'react'
 
+import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
-import Button from '@mui/material/Button'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
-import IconButton from '@mui/material/IconButton'
-import { styled } from '@mui/material/styles'
-import Typography from '@mui/material/Typography'
-
-// Styled Dialog
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
-    padding: theme.spacing(2),
-  },
-  '& .MuiDialogActions-root': {
-    padding: theme.spacing(1),
-  },
-}))
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  IconButton,
+  MenuItem,
+  TextField,
+  Typography,
+} from '@mui/material'
+import InputAdornment from '@mui/material/InputAdornment'
 
 export default function Budgets() {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
+  const [form, setForm] = useState({
+    category: 'entertainment',
+    limit: '',
+    theme: 'green',
+  })
 
   const handleClickOpen = () => {
     setOpen(true)
   }
 
-  const handleClose = () => {
-    setOpen(false)
-  }
+  const CATEGORY_OPTIONS = [
+    { value: 'entertainment', label: 'Entertainment' },
+    { value: 'bills', label: 'Bills' },
+    { value: 'groceries', label: 'Groceries' },
+    { value: 'diningOut', label: 'Dining Out' },
+    { value: 'transportation', label: 'Transportation' },
+    { value: 'personalCare', label: 'Personal Care' },
+    { value: 'education', label: 'Education' },
+  ]
+
+  const COLOR_OPTIONS = [
+    { value: 'green', label: 'Green', color: '#1f7a6d' },
+    { value: 'yellow', label: 'Yellow', color: '#f2c94c' },
+    { value: 'cyan', label: 'Cyan', color: '#56ccf2' },
+    { value: 'navy', label: 'Navy', color: '#1f2a44' },
+    { value: 'red', label: 'Red', color: '#eb5757' },
+    { value: 'purple', label: 'Purple', color: '#9b51e0' },
+    { value: 'turquoise', label: 'Turquoise', color: '#2dd4bf' },
+    { value: 'brown', label: 'Brown', color: '#8d6e63' },
+    { value: 'magenta', label: 'Magenta', color: '#d63384' },
+    { value: 'blue', label: 'Blue', color: '#2f80ed' },
+    { value: 'navyGrey', label: 'Navy Grey', color: '#6b7280' },
+    { value: 'armyGreen', label: 'Army Green', color: '#6b8e23' },
+    { value: 'pink', label: 'Pink', color: '#f472b6' },
+    { value: 'gold', label: 'Gold', color: '#d4af37' },
+    { value: 'orange', label: 'Orange', color: '#f2994a' },
+  ]
 
   return (
     <div className="budgets-page">
-      {/* HEADER */}
       <div className="budgets-header">
         <h1>Budgets</h1>
         <button className="add-budget-btn" onClick={handleClickOpen}>
@@ -45,7 +67,6 @@ export default function Budgets() {
       </div>
 
       <div className="budgets-grid">
-        {/* LEFT SUMMARY */}
         <div className="budget-summary-card">
           <div className="donut-wrapper">
             <div className="donut">
@@ -90,7 +111,6 @@ export default function Budgets() {
           </ul>
         </div>
 
-        {/* RIGHT COLUMN – Budget Cards */}
         <div className="budget-categories">
           <BudgetCard
             title="Entertainment"
@@ -123,73 +143,167 @@ export default function Budgets() {
         </div>
       </div>
 
-      <BootstrapDialog
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
+      {/* ===== MODAL ===== */}
+      <Dialog
         open={open}
+        onClose={() => setOpen(false)}
+        maxWidth="sm"
+        fullWidth
+        BackdropProps={{
+          sx: {
+            backgroundColor: 'rgba(0,0,0,0.45)',
+            backdropFilter: 'blur(2px)',
+          },
+        }}
+        PaperProps={{
+          sx: {
+            borderRadius: '14px',
+            padding: '10px',
+          },
+        }}
       >
-        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Add New Budget
-        </DialogTitle>
+        <div className="budget-modal">
+          <div className="budget-modal-header">
+            <h3>Add New Budget</h3>
+            <IconButton onClick={() => setOpen(false)}>
+              <CloseIcon />
+            </IconButton>
+          </div>
 
-        <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
+          <p className="budget-modal-desc">
+            Choose a category to set a spending budget. These categories can
+            help you monitor spending.
+          </p>
 
-        <DialogContent dividers>
-          <Typography gutterBottom>
-            Create a new budget category with spending limits.
-          </Typography>
-          <Typography gutterBottom>
-            Enter category name, maximum spending limit, and optional
-            description.
-          </Typography>
-          {/* ← Put your form fields (TextField, etc.) here later */}
-        </DialogContent>
+          <DialogContent>
+            <div className="budget-form">
+              <label>Budget Category</label>
+              <TextField
+                select
+                fullWidth
+                size="small"
+                value={form.category}
+                onChange={(e) => setForm({ ...form, category: e.target.value })}
+              >
+                {CATEGORY_OPTIONS.map((o) => (
+                  <MenuItem key={o.value} value={o.value}>
+                    {o.label}
+                  </MenuItem>
+                ))}
+              </TextField>
 
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button variant="contained" onClick={handleClose}>
-            Create Budget
-          </Button>
-        </DialogActions>
-      </BootstrapDialog>
+              <label>Maximum Spending</label>
+              <TextField
+                fullWidth
+                size="small"
+                type="number"
+                placeholder="2000"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">$</InputAdornment>
+                  ),
+                }}
+              />
+
+              <label>Color Tag</label>
+              <TextField
+                select
+                fullWidth
+                size="small"
+                value={form.theme}
+                onChange={(e) => setForm({ ...form, theme: e.target.value })}
+              >
+                {COLOR_OPTIONS.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        width: '100%',
+                      }}
+                    >
+                      <Box
+                        sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}
+                      >
+                        <Box
+                          sx={{
+                            width: 12,
+                            height: 12,
+                            borderRadius: '50%',
+                            backgroundColor: option.color,
+                          }}
+                        />
+                        <Typography fontSize={14}>{option.label}</Typography>
+                      </Box>
+
+                      {form.theme === option.value && (
+                        <CheckIcon fontSize="small" sx={{ color: '#1f7a6d' }} />
+                      )}
+                    </Box>
+                  </MenuItem>
+                ))}
+              </TextField>
+
+              <Button
+                variant="contained"
+                className="submit-budget-btn"
+                fullWidth
+              >
+                Add Budget
+              </Button>
+            </div>
+          </DialogContent>
+        </div>
+      </Dialog>
     </div>
   )
 }
 
 function BudgetCard({ title, color, max, spent, remaining }) {
+  const [openMenu, setOpenMenu] = useState(false)
+  const menuRef = useRef(null)
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpenMenu(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
   return (
     <div className="budget-card">
-      {/* HEADER */}
       <div className="budget-card-header">
         <div className="title">
           <span className={`dot ${color}`}></span>
           {title}
         </div>
-        <span className="menu-bar">•••</span>
+        {/* MENU */}
+        <div className="menu-wrapper" ref={menuRef}>
+          <span className="menu-bar" onClick={() => setOpenMenu(!openMenu)}>
+            •••
+          </span>
+
+          {openMenu && (
+            <div className="menu-dropdown">
+              <div className="menu-item">✏️ Edit Budget</div>
+              <div className="menu-item danger">🗑 Delete Budget</div>
+            </div>
+          )}
+        </div>
       </div>
 
       <p className="max-text">Maximum of {max}</p>
 
-      {/* PROGRESS */}
       <div className="progress-bar">
         <div className={`progress-fill ${color}`} />
       </div>
 
-      {/* STATS */}
       <div className="budget-stats">
         <div className="stat">
-          {/* <span className="stat-bar green" /> */}
           <span className={`stat-bar ${color}`} />
           <div>
             <p>Spent</p>
@@ -206,7 +320,6 @@ function BudgetCard({ title, color, max, spent, remaining }) {
         </div>
       </div>
 
-      {/* LATEST SPENDING */}
       <div className="latest">
         <div className="latest-header">
           <h4>Latest Spending</h4>

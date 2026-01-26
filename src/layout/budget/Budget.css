@@ -23,19 +23,13 @@
   cursor: pointer;
 }
 
-/* GRID */
 .budgets-grid {
-  /* display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 20px; */
-
   display: grid;
-  grid-template-columns: 340px 1fr; /* left fixed, right flexible */
+  grid-template-columns: 340px 1fr;
   gap: 24px;
-  align-items: start; /* 🔥 IMPORTANT */
+  align-items: start;
 }
 
-/* SUMMARY CARD */
 .budget-summary-card {
   background: white;
   border-radius: 16px;
@@ -103,7 +97,6 @@
   border-bottom: none;
 }
 
-/* VERTICAL COLOR BAR */
 .bar {
   width: 4px;
   height: 24px;
@@ -123,7 +116,6 @@
   background: #6b7280;
 }
 
-/* TEXT */
 .label {
   color: #555;
 }
@@ -146,14 +138,12 @@
   margin-left: 4px;
 }
 
-/* RIGHT COLUMN */
 .budget-categories {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-/* CATEGORY CARD */
 .budget-card {
   background: #fff;
   border-radius: 16px;
@@ -184,7 +174,6 @@
   margin: 6px 0 12px;
 }
 
-/* PROGRESS */
 .progress-bar {
   width: 100%;
   height: 15px;
@@ -218,7 +207,6 @@
   margin: 0;
 }
 
-/* DOT COLORS */
 .dot {
   width: 10px;
   height: 10px;
@@ -316,7 +304,6 @@
   border-top: none;
 }
 
-/* LEFT USER */
 .user {
   display: flex;
   align-items: center;
@@ -345,7 +332,6 @@
   background: #7c5fcf;
 }
 
-/* RIGHT SIDE */
 .amount-date {
   text-align: right;
 }
@@ -358,11 +344,6 @@
 .amount-date small {
   font-size: 12px;
   color: #777;
-}
-
-.menu-bar {
-  cursor: pointer;
-  color: #a4a2a2;
 }
 
 /* ===============================
@@ -398,15 +379,12 @@
    (≤1024px)
 ================================ */
 @media (max-width: 1023px) and (min-width: 769px) {
-  /* SUMMARY CARD LAYOUT */
   .budget-summary-card {
     display: grid;
     grid-template-columns: 220px 1fr;
     gap: 24px;
-    /* align-items: center; */
   }
 
-  /* DONUT LEFT */
   .donut-wrapper {
     margin-bottom: 0;
     margin-top: 60px;
@@ -423,7 +401,6 @@
     padding-top: 28px;
   }
 
-  /* RIGHT CONTENT */
   .budget-summary-card h3 {
     grid-column: 2;
     margin-bottom: 10px;
@@ -452,7 +429,6 @@
     display: none;
   }
 
-  /* HEADER */
   .budgets-header {
     flex-direction: column;
     align-items: flex-start;
@@ -464,13 +440,11 @@
     text-align: center;
   }
 
-  /* GRID */
   .budgets-grid {
     grid-template-columns: 1fr;
     gap: 16px;
   }
 
-  /* SUMMARY */
   .donut {
     width: 120px;
     height: 120px;
@@ -492,7 +466,6 @@
     text-align: left;
   }
 
-  /* BUDGET CARD */
   .budget-card {
     padding: 14px;
   }
@@ -502,9 +475,7 @@
     gap: 12px;
   }
 
-  /* LATEST */
   .latest li {
-    /* flex-direction: column; */
     align-items: flex-start;
     gap: 6px;
   }
@@ -512,4 +483,103 @@
   .amount-date {
     text-align: left;
   }
+}
+
+/* ================= MODAL ================= */
+
+.budget-modal {
+  padding: 10px 16px 20px;
+}
+
+.budget-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.budget-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.budget-modal-desc {
+  font-size: 13px;
+  color: #777;
+  margin: 8px 0 18px;
+}
+
+.budget-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.budget-form label {
+  font-size: 13px;
+  color: #555;
+}
+
+.currency {
+  margin-right: 6px;
+  color: #555;
+}
+
+.submit-budget-btn {
+  background: #18191e !important;
+  padding: 12px !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  margin-top: 10px !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #18191e !important;
+}
+
+.menu-wrapper {
+  position: relative;
+}
+
+.menu-bar {
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  color: #a4a2a2;
+}
+
+.menu-bar:hover {
+  background: #f1f1f1;
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 28px;
+  right: 0;
+  background: #ededed;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  width: 160px;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.menu-item {
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.menu-item:hover {
+  background: #f6f6f6;
+}
+
+.menu-item.danger {
+  color: #d92d20;
+}
+
+.menu-item.danger:hover {
+  background: #feecec;
 }
