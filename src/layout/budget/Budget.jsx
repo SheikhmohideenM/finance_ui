@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/set-state-in-effect */
-
 import '../budget/Budget.css'
 
 import { React, useEffect, useRef, useState } from 'react'
@@ -30,6 +29,7 @@ export default function Budgets() {
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [error, setError] = useState(null)
   const [selectedBudget, setSelectedBudget] = useState(null)
+  const navigate = useNavigate()
 
   const [form, setForm] = useState({
     category: 'entertainment',
@@ -38,19 +38,7 @@ export default function Budgets() {
   })
 
   const [budgets, setBudgets] = useState([])
-
-  const fetchBudgetLists = async () => {
-    try {
-      const data = await ApiService.fetchBudgetLists()
-      setBudgets(data)
-    } catch (error) {
-      setError('Failed to load budget lists')
-    }
-  }
-
-  useEffect(() => {
-    fetchBudgetLists()
-  }, [])
+  const [errors, setErrors] = useState([])
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -84,32 +72,33 @@ export default function Budgets() {
     { value: 'orange', label: 'Orange', color: '#f2994a' },
   ]
 
-  const [errors, setErrors] = useState([])
+  const fetchBudgetLists = async () => {
+    try {
+      const data = await ApiService.fetchBudgetLists()
+      setBudgets(data)
+    } catch (error) {
+      setError('Failed to load budget lists')
+    }
+  }
 
-  const navigate = useNavigate()
+  useEffect(() => {
+    fetchBudgetLists()
+  }, [])
 
   async function handleSubmit(e) {
     e.preventDefault()
     setErrors([])
 
-    const res = await fetch('http://localhost:3000/api/v1/budgets', {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        budget: {
-          category: form.category,
-          color: form.theme,
-          max: form.limit,
-        },
-      }),
-    })
+    try {
+      const data = await ApiService.createBudget({
+        category: form.category,
+        color: form.theme,
+        max: form.limit,
+      })
 
-    const data = await res.json()
-
-    if (res.ok) {
       setBudgets((prev) => [...prev, data])
       setOpen(false)
+
       setForm({
         category: 'entertainment',
         limit: '',
@@ -122,8 +111,57 @@ export default function Budgets() {
         text: 'Your budget has been created successfully!',
         confirmButtonColor: '#111318',
       })
-    } else {
-      setErrors(data.errors || 'Budget Creation failed')
+    } catch (err) {
+      setErrors(err.errors || ['Budget Creation failed'])
+    }
+  }
+
+  const handleUpdate = async () => {
+    try {
+      const updated = await ApiService.updateBudget(selectedBudget.id, {
+        category: form.category,
+        color: form.theme,
+        max: form.limit,
+      })
+
+      setBudgets((prev) => prev.map((b) => (b.id === updated.id ? updated : b)))
+      setSelectedBudget(null)
+      setEditOpen(false)
+      Swal.fire({
+        icon: 'success',
+        title: 'Budget Updated',
+        text: 'Budget updated successfully!',
+        confirmButtonColor: '#111318',
+      })
+    } catch (err) {
+      setErrors(err.errors)
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!selectedBudget) return
+
+    const id = selectedBudget.id
+
+    const previousBudgets = [...budgets]
+
+    try {
+      setBudgets((prev) => prev.filter((b) => b.id !== id))
+      setDeleteOpen(false)
+
+      await ApiService.deleteBudget(id)
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Budget Deleted',
+        text: 'Budget Deleted successfully!',
+        confirmButtonColor: '#111318',
+      })
+    } catch (err) {
+      setBudgets(previousBudgets)
+      Swal.fire('Error', err?.errors?.[0] || 'Failed to delete budget', 'error')
+    } finally {
+      setSelectedBudget(null)
     }
   }
 
@@ -182,6 +220,11 @@ export default function Budgets() {
               remaining={`$${(Number(budget.max) - Number(budget.spent)).toFixed(2)}`}
               onEdit={() => {
                 setSelectedBudget(budget)
+                setForm({
+                  category: budget.category,
+                  limit: budget.max,
+                  theme: budget.color,
+                })
                 setEditOpen(true)
               }}
               onDelete={() => {
@@ -362,8 +405,6 @@ export default function Budgets() {
           if (reason === 'backdropClick') return
           setEditOpen(false)
         }}
-        maxWidth="sm"
-        fullWidth
         BackdropProps={{
           sx: {
             backgroundColor: 'rgba(0,0,0,0.45)',
@@ -372,8 +413,10 @@ export default function Budgets() {
         }}
         PaperProps={{
           sx: {
+            width: { xs: '90%', sm: '480px' },
+            maxWidth: '480px',
+            maxHeight: '480px',
             borderRadius: '14px',
-            padding: '10px',
           },
         }}
       >
@@ -389,8 +432,22 @@ export default function Budgets() {
             As your budgets change, feel free to update your spending limits.
           </p>
 
+          {Array.isArray(errors) && errors.length > 0 && (
+            <Box
+              sx={{
+                color: '#c0392b',
+                fontSize: '15px',
+                marginLeft: '25px',
+              }}
+            >
+              {errors.map((err, index) => (
+                <div key={index}>• {err}</div>
+              ))}
+            </Box>
+          )}
+
           <DialogContent>
-            <div className="budget-form">
+            <form className="budget-form" onSubmit={handleUpdate} noValidate>
               <label>Budget Category</label>
               <TextField
                 select
@@ -420,47 +477,73 @@ export default function Budgets() {
                 }}
               />
 
-              <label>Color Tag</label>
+              <label>Theme</label>
               <TextField
                 select
                 fullWidth
                 size="small"
-                value={form?.theme || ''}
+                value={form.theme}
                 onChange={(e) => setForm({ ...form, theme: e.target.value })}
               >
-                {COLOR_OPTIONS.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    <Box
+                {COLOR_OPTIONS.map((option) => {
+                  const isUsed = usedColors.includes(option.value.toLowerCase())
+
+                  return (
+                    <MenuItem
+                      key={option.value}
+                      value={option.value}
+                      disabled={isUsed}
                       sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        width: '100%',
+                        opacity: isUsed ? 0.5 : 1,
+                        cursor: isUsed ? 'not-allowed' : 'pointer',
                       }}
                     >
                       <Box
-                        sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          width: '100%',
+                        }}
                       >
                         <Box
                           sx={{
-                            width: 12,
-                            height: 12,
-                            borderRadius: '50%',
-                            backgroundColor: option.color,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1.5,
                           }}
-                        />
-                        <Typography fontSize={14}>{option.label}</Typography>
-                      </Box>
+                        >
+                          <Box
+                            sx={{
+                              width: 12,
+                              height: 12,
+                              borderRadius: '50%',
+                              backgroundColor: option.color,
+                            }}
+                          />
+                          <Typography fontSize={14}>{option.label}</Typography>
+                        </Box>
 
-                      {form.theme === option.value && (
-                        <CheckIcon fontSize="small" sx={{ color: '#1f7a6d' }} />
-                      )}
-                    </Box>
-                  </MenuItem>
-                ))}
+                        {isUsed ? (
+                          <Typography fontSize={12} color="text.secondary">
+                            Already used
+                          </Typography>
+                        ) : (
+                          form.theme === option.value && (
+                            <CheckIcon
+                              fontSize="small"
+                              sx={{ color: '#1f7a6d' }}
+                            />
+                          )
+                        )}
+                      </Box>
+                    </MenuItem>
+                  )
+                })}
               </TextField>
 
               <Button
+                type="submit"
                 variant="contained"
                 className="submit-budget-btn"
                 fullWidth
@@ -470,7 +553,7 @@ export default function Budgets() {
               >
                 Save Changes
               </Button>
-            </div>
+            </form>
           </DialogContent>
         </div>
       </Dialog>
@@ -514,6 +597,7 @@ export default function Budgets() {
             <div className="budget-delete-form">
               <Button
                 fullWidth
+                onClick={handleDelete}
                 sx={{
                   background: '#c0392b',
                   color: '#fff',
@@ -564,7 +648,6 @@ function BudgetCard({ title, color, max, spent, remaining, onEdit, onDelete }) {
           <span className={`dot ${color}`}></span>
           {title}
         </div>
-        {/* MENU */}
         <div className="menu-wrapper" ref={menuRef}>
           <span className="menu-bar" onClick={() => setOpenMenu(!openMenu)}>
             •••

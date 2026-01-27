@@ -1,19 +1,7 @@
 /* eslint-disable no-unused-vars */
 import '../dashboard/Dashboard.css'
 
-import { useEffect, useState } from 'react'
-
 export default function Dashboard() {
-  const [accounts, setAccounts] = useState([])
-
-  useEffect(() => {
-    fetch('http://localhost:3000/accounts', {
-      credentials: 'include',
-    })
-      .then((res) => res.json())
-      .then(setAccounts)
-  }, [])
-
   return (
     <>
       <h1 className="page-title">Overview</h1>

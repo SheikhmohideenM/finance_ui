@@ -17,7 +17,7 @@ function App() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('http://localhost:3000/accounts', { credentials: 'include' })
+    fetch('http://localhost:3000/dashboard', { credentials: 'include' })
       .then((res) => {
         if (res.ok) setLoggedIn(true)
       })

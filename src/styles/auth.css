@@ -12,7 +12,7 @@
   height: 640px;
   background: white;
   display: grid;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   grid-template-columns: 38% 52%;
   border-radius: 20px;
   overflow: hidden;
@@ -40,7 +40,7 @@
 }
 
 .auth-card {
-  width: 360px;
+  width: 380px;
 }
 
 .auth-card h2 {
@@ -105,7 +105,6 @@
 .error-list li {
   margin-left: 18px;
 }
-
 
 /* MOBILE */
 @media (max-width: 900px) {
