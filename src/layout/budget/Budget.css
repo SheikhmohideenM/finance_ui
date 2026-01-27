@@ -107,13 +107,46 @@
   background: #1f7a6d;
 }
 .bar.blue {
-  background: #7ccad6;
+  background: #2f80ed;
 }
 .bar.orange {
-  background: #f2b880;
+  background: #f2994a;
 }
 .bar.purple {
+  background: #9b51e0;
+}
+.bar.yellow {
+  background: #f2c94c;
+}
+.bar.cyan {
+  background: #56ccf2;
+}
+.bar.navy {
+  background: #1f2a44;
+}
+.bar.red {
+  background: #eb5757;
+}
+.bar.turquoise {
+  background: #2dd4bf;
+}
+.bar.brown {
+  background: #8d6e63;
+}
+.bar.magenta {
+  background: #d63384;
+}
+.bar.navyGrey {
   background: #6b7280;
+}
+.bar.armyGreen {
+  background: #6b8e23;
+}
+.bar.pink {
+  background: #f472b6;
+}
+.bar.gold {
+  background: #d4af37;
 }
 
 .label {
@@ -192,13 +225,46 @@
   background: #1f7a6d;
 }
 .progress-fill.blue {
-  background: #7ccad6;
+  background: #2f80ed;
 }
 .progress-fill.orange {
-  background: #f2b880;
+  background: #f2994a;
 }
 .progress-fill.purple {
+  background: #9b51e0;
+}
+.progress-fill.yellow {
+  background: #f2c94c;
+}
+.progress-fill.cyan {
+  background: #56ccf2;
+}
+.progress-fill.navy {
+  background: #1f2a44;
+}
+.progress-fill.red {
+  background: #eb5757;
+}
+.progress-fill.turquoise {
+  background: #2dd4bf;
+}
+.progress-fill.brown {
+  background: #8d6e63;
+}
+.progress-fill.magenta {
+  background: #d63384;
+}
+.progress-fill.navyGrey {
   background: #6b7280;
+}
+.progress-fill.armyGreen {
+  background: #6b8e23;
+}
+.progress-fill.pink {
+  background: #f472b6;
+}
+.progress-fill.gold {
+  background: #d4af37;
 }
 
 .budget-stats p {
@@ -217,13 +283,46 @@
   background: #1f7a6d;
 }
 .dot.blue {
-  background: #7ccad6;
+  background: #2f80ed;
 }
 .dot.orange {
-  background: #f2b880;
+  background: #f2994a;
 }
 .dot.purple {
+  background: #9b51e0;
+}
+.dot.yellow {
+  background: #f2c94c;
+}
+.dot.cyan {
+  background: #56ccf2;
+}
+.dot.navy {
+  background: #1f2a44;
+}
+.dot.red {
+  background: #eb5757;
+}
+.dot.turquoise {
+  background: #2dd4bf;
+}
+.dot.brown {
+  background: #8d6e63;
+}
+.dot.magenta {
+  background: #d63384;
+}
+.dot.navyGrey {
   background: #6b7280;
+}
+.dot.armyGreen {
+  background: #6b8e23;
+}
+.dot.pink {
+  background: #f472b6;
+}
+.dot.gold {
+  background: #d4af37;
 }
 
 /* ===== STATS ===== */
@@ -248,6 +347,48 @@
 
 .stat-bar.green {
   background: #1f7a6d;
+}
+.stat-bar.blue {
+  background: #2f80ed;
+}
+.stat-bar.orange {
+  background: #f2994a;
+}
+.stat-bar.purple {
+  background: #9b51e0;
+}
+.stat-bar.yellow {
+  background: #f2c94c;
+}
+.stat-bar.cyan {
+  background: #56ccf2;
+}
+.stat-bar.navy {
+  background: #1f2a44;
+}
+.stat-bar.red {
+  background: #eb5757;
+}
+.stat-bar.turquoise {
+  background: #2dd4bf;
+}
+.stat-bar.brown {
+  background: #8d6e63;
+}
+.stat-bar.magenta {
+  background: #d63384;
+}
+.stat-bar.navyGrey {
+  background: #6b7280;
+}
+.stat-bar.armyGreen {
+  background: #6b8e23;
+}
+.stat-bar.pink {
+  background: #f472b6;
+}
+.stat-bar.gold {
+  background: #d4af37;
 }
 
 .stat-bar.light {
@@ -531,6 +672,11 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .budget-delete-form {
@@ -560,6 +706,15 @@
 
 .MuiOutlinedInput-root.Mui-focused fieldset {
   border-color: #18191e !important;
+}
+
+.css-kw13he-MuiDialogContent-root {
+  -webkit-flex: 1 1 auto !important;
+  -ms-flex: 1 1 auto !important;
+  flex: 1 1 auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overflow-y: auto !important;
+  padding: 15px 24px !important;
 }
 
 .menu-wrapper {
