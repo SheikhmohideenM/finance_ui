@@ -73,6 +73,9 @@ export default function Budgets() {
     { value: 'orange', label: 'Orange', color: '#f2994a' },
   ]
 
+  const hasBudgets =
+    budgets.length > 0 && budgets.some((b) => Number(b.max || 0) > 0)
+
   const getColorHex = (color) => {
     const map = {
       green: '#1f7a6d',
@@ -109,6 +112,7 @@ export default function Budgets() {
         color: getColorHex(b.color),
         title: b.title,
         amount: value,
+        isFullCircle: angle >= 359.99,
       }
 
       startAngle += angle
@@ -249,27 +253,45 @@ export default function Budgets() {
         <div className="budget-summary-card">
           <div className="donut-wrapper">
             <svg width="160" height="160" viewBox="0 0 160 160">
-              {getDonutSlices(budgets).map((slice, i) => (
-                <Tooltip
-                  key={i}
-                  arrow
-                  title={`${slice.title}: $${slice.amount.toFixed(2)}`}
-                >
-                  <path
-                    d={describeArc(
-                      80,
-                      80,
-                      70,
-                      slice.startAngle,
-                      slice.endAngle,
-                    )}
-                    stroke={slice.color}
-                    strokeWidth="18"
-                    fill="none"
-                    style={{ cursor: 'pointer' }}
-                  />
-                </Tooltip>
-              ))}
+              {hasBudgets &&
+                getDonutSlices(budgets).map((slice, i) =>
+                  slice.isFullCircle ? (
+                    <Tooltip
+                      key={i}
+                      arrow
+                      title={`${slice.title}: $${slice.amount.toFixed(2)}`}
+                    >
+                      <circle
+                        cx="80"
+                        cy="80"
+                        r="70"
+                        stroke={slice.color}
+                        strokeWidth="18"
+                        fill="none"
+                      />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip
+                      key={i}
+                      arrow
+                      title={`${slice.title}: $${slice.amount.toFixed(2)}`}
+                    >
+                      <path
+                        d={describeArc(
+                          80,
+                          80,
+                          70,
+                          slice.startAngle,
+                          slice.endAngle,
+                        )}
+                        stroke={slice.color}
+                        strokeWidth="18"
+                        fill="none"
+                        style={{ cursor: 'pointer' }}
+                      />
+                    </Tooltip>
+                  ),
+                )}
 
               <circle cx="80" cy="80" r="52" fill="#fff" />
 
