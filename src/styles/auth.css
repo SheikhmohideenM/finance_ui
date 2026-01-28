@@ -69,7 +69,6 @@
 }
 
 .auth-card button {
-  /* width: 380px; */
   width: 100%;
   padding: 12px;
   background: #121212;
@@ -106,7 +105,6 @@
   margin-left: 18px;
 }
 
-/* MOBILE */
 @media (max-width: 900px) {
   .auth-container {
     grid-template-columns: 1fr;

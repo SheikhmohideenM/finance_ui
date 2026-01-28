@@ -325,7 +325,6 @@
   background: #d4af37;
 }
 
-/* ===== STATS ===== */
 .budget-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -408,7 +407,7 @@
 .see-all {
   color: #a4a2a2;
 }
-/* ===== LATEST SPENDING ===== */
+
 .latest {
   background: #f6f2ee;
   border-radius: 14px;
@@ -487,9 +486,6 @@
   color: #777;
 }
 
-/* ===============================
-   TABLET (≤1024px)
-================================ */
 @media (max-width: 1024px) {
   .budgets-grid {
     grid-template-columns: 1fr;
@@ -515,10 +511,6 @@
   }
 }
 
-/* ===============================
-   TABLET ONLY – Spending Summary
-   (≤1024px)
-================================ */
 @media (max-width: 1023px) and (min-width: 769px) {
   .budget-summary-card {
     display: grid;
@@ -557,9 +549,6 @@
   }
 }
 
-/* ===============================
-   MOBILE (≤768px)
-================================ */
 @media (max-width: 768px) {
   .budgets-page {
     padding: 16px;
@@ -625,8 +614,6 @@
     text-align: left;
   }
 }
-
-/* ================= MODAL ================= */
 
 .budget-modal {
   padding: 10px 16px 20px;

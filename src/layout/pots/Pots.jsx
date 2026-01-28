@@ -235,7 +235,6 @@ export default function Pots() {
 
   return (
     <div className="pots-page">
-      {/* HEADER */}
       <div className="pots-header">
         <h1>Pots</h1>
         <button className="add-pot-btn" onClick={handleClickOpen}>
@@ -243,7 +242,6 @@ export default function Pots() {
         </button>
       </div>
 
-      {/* GRID */}
       <div className="pots-grid">
         {pots.map((pot, i) => (
           <PotCard
@@ -688,13 +686,11 @@ function PotCard({
 
   return (
     <div className="pot-card">
-      {/* CARD HEADER */}
       <div className="pot-card-header">
         <div className="title">
           <span className={`dot ${color}`} />
           {title}
         </div>
-        {/* MENU */}
         <div className="menu-wrapper" ref={menuRef}>
           <span className="menu-bar" onClick={() => setOpenMenu(!openMenu)}>
             •••
@@ -713,11 +709,9 @@ function PotCard({
         </div>
       </div>
 
-      {/* TOTAL */}
       <p className="label">Total Saved</p>
       <h2 className="amount">${saved.toFixed(2)}</h2>
 
-      {/* PROGRESS */}
       <div className="progress-wrapper">
         <div className="progress-bar">
           <div
@@ -732,7 +726,6 @@ function PotCard({
         </div>
       </div>
 
-      {/* ACTIONS */}
       <div className="pot-actions">
         <button className="secondary" onClick={handleClickOpenAddMoney}>
           + Add Money
@@ -765,7 +758,6 @@ function PotCard({
         }}
       >
         <div className="pot-modal">
-          {/* HEADER */}
           <div className="pot-modal-header">
             <h3>Add to ‘{title}’</h3>
             <IconButton onClick={() => setAddMoney(false)}>
@@ -861,7 +853,6 @@ function PotCard({
         }}
       >
         <div className="pot-modal">
-          {/* HEADER */}
           <div className="pot-modal-header">
             <h3>Withdraw from ‘{title}’</h3>
             <IconButton onClick={() => setWithdraw(false)}>

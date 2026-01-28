@@ -20,6 +20,7 @@ import {
   Typography,
 } from '@mui/material'
 import InputAdornment from '@mui/material/InputAdornment'
+import Tooltip from '@mui/material/Tooltip'
 
 import ApiService from '../../services/ApiService'
 
@@ -72,28 +73,6 @@ export default function Budgets() {
     { value: 'orange', label: 'Orange', color: '#f2994a' },
   ]
 
-  const buildDonutGradient = (budgets) => {
-    const total = budgets.reduce((sum, b) => sum + Number(b.max || 0), 0)
-
-    if (total === 0) {
-      return '#eee 0deg 360deg'
-    }
-
-    let currentAngle = 0
-    const segments = budgets.map((b) => {
-      const value = Number(b.max || 0)
-      const angle = (value / total) * 360
-
-      const start = currentAngle
-      const end = currentAngle + angle
-      currentAngle = end
-
-      return `${getColorHex(b.color)} ${start}deg ${end}deg`
-    })
-
-    return segments.join(', ')
-  }
-
   const getColorHex = (color) => {
     const map = {
       green: '#1f7a6d',
@@ -114,6 +93,46 @@ export default function Budgets() {
     }
 
     return map[color] || '#ccc'
+  }
+
+  const getDonutSlices = (budgets) => {
+    const total = budgets.reduce((s, b) => s + Number(b.max || 0), 0)
+    let startAngle = 0
+
+    return budgets.map((b) => {
+      const value = Number(b.max || 0)
+      const angle = total ? (value / total) * 360 : 0
+
+      const slice = {
+        startAngle,
+        endAngle: startAngle + angle,
+        color: getColorHex(b.color),
+        title: b.title,
+        amount: value,
+      }
+
+      startAngle += angle
+      return slice
+    })
+  }
+
+  const polarToCartesian = (cx, cy, r, angle) => {
+    const rad = ((angle - 90) * Math.PI) / 180
+    return {
+      x: cx + r * Math.cos(rad),
+      y: cy + r * Math.sin(rad),
+    }
+  }
+
+  const describeArc = (cx, cy, r, startAngle, endAngle) => {
+    const start = polarToCartesian(cx, cy, r, endAngle)
+    const end = polarToCartesian(cx, cy, r, startAngle)
+    const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0
+
+    return `
+    M ${start.x} ${start.y}
+    A ${r} ${r} 0 ${largeArcFlag} 0 ${end.x} ${end.y}
+  `
   }
 
   const fetchBudgetLists = async () => {
@@ -229,17 +248,44 @@ export default function Budgets() {
       <div className="budgets-grid">
         <div className="budget-summary-card">
           <div className="donut-wrapper">
-            <div
-              className="donut"
-              style={{
-                background: `conic-gradient(${buildDonutGradient(budgets)})`,
-              }}
-            >
-              <div className="donut-center">
-                <h2>${totalSpent.toFixed(2)}</h2>
-                <p>of ${totalLimit.toFixed(2)} limit</p>
-              </div>
-            </div>
+            <svg width="160" height="160" viewBox="0 0 160 160">
+              {getDonutSlices(budgets).map((slice, i) => (
+                <Tooltip
+                  key={i}
+                  arrow
+                  title={`${slice.title}: $${slice.amount.toFixed(2)}`}
+                >
+                  <path
+                    d={describeArc(
+                      80,
+                      80,
+                      70,
+                      slice.startAngle,
+                      slice.endAngle,
+                    )}
+                    stroke={slice.color}
+                    strokeWidth="18"
+                    fill="none"
+                    style={{ cursor: 'pointer' }}
+                  />
+                </Tooltip>
+              ))}
+
+              <circle cx="80" cy="80" r="52" fill="#fff" />
+
+              <text
+                x="80"
+                y="75"
+                textAnchor="middle"
+                fontSize="16"
+                fontWeight="600"
+              >
+                ${totalSpent.toFixed(0)}
+              </text>
+              <text x="80" y="95" textAnchor="middle" fontSize="11" fill="#777">
+                of ${totalLimit.toFixed(0)}
+              </text>
+            </svg>
           </div>
 
           <h3>Spending Summary</h3>

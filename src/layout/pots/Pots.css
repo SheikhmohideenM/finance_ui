@@ -2,7 +2,6 @@
   padding: 24px;
 }
 
-/* HEADER */
 .pots-header {
   display: flex;
   justify-content: space-between;
@@ -24,21 +23,18 @@
   cursor: pointer;
 }
 
-/* GRID */
 .pots-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
 
-/* CARD */
 .pot-card {
   background: #fff;
   border-radius: 16px;
   padding: 20px;
 }
 
-/* CARD HEADER */
 .pot-card-header {
   display: flex;
   justify-content: space-between;
@@ -58,7 +54,6 @@
   color: #999;
 }
 
-/* LABEL */
 .label {
   font-size: 12px;
   color: #777;
@@ -69,7 +64,6 @@
   font-size: 20px;
 }
 
-/* PROGRESS */
 .progress-wrapper {
   margin-bottom: 16px;
 }
@@ -94,7 +88,6 @@
   margin-top: 6px;
 }
 
-/* ACTIONS */
 .pot-actions {
   display: flex;
   gap: 10px;
@@ -110,7 +103,6 @@
   cursor: pointer;
 }
 
-/* COLORS */
 .dot {
   width: 10px;
   height: 10px;
@@ -154,16 +146,11 @@
   color: #fff;
 }
 
-/* ==========================
-   RESPONSIVE
-========================== */
 @media (max-width: 1024px) {
   .pots-grid {
     grid-template-columns: 1fr;
   }
 }
-
-/* ================= MODAL ================= */
 
 .pot-modal {
   padding: 15px 20px 0px;
@@ -323,7 +310,6 @@
   margin-top: 6px;
 }
 
-/* Withdraw danger styles */
 .progress-fill.danger {
   background: #c0392b;
 }
