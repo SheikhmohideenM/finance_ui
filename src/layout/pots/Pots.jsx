@@ -4,6 +4,8 @@ import '../pots/Pots.css'
 
 import { React, useEffect, useRef, useState } from 'react'
 
+import Swal from 'sweetalert2'
+
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import {
@@ -18,60 +20,65 @@ import {
 } from '@mui/material'
 import InputAdornment from '@mui/material/InputAdornment'
 
+import ApiService from '../../services/ApiService'
+
 export default function Pots() {
+  const [pots, setPots] = useState([])
   const [open, setOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
-
   const [selectedPot, setSelectedPot] = useState(null)
+
+  const [errors, setErrors] = useState(null)
+  const [amount, setAmount] = useState('')
 
   const [form, setForm] = useState({
     name: '',
-    limit: '',
-    theme: 'green',
+    target: '',
+    color: 'green',
   })
 
   const handleClickOpen = () => {
     setOpen(true)
   }
 
-  const pots = [
-    {
-      title: 'Savings',
-      color: 'green',
-      saved: 159,
-      target: 2000,
-      percent: 7.95,
-    },
-    {
-      title: 'Concert Ticket',
-      color: 'gray',
-      saved: 110,
-      target: 150,
-      percent: 73.3,
-    },
-    {
-      title: 'Gift',
-      color: 'blue',
-      saved: 40,
-      target: 60,
-      percent: 66.6,
-    },
-    {
-      title: 'New Laptop',
-      color: 'orange',
-      saved: 10,
-      target: 1000,
-      percent: 1,
-    },
-    {
-      title: 'Holiday',
-      color: 'purple',
-      saved: 531,
-      target: 1440,
-      percent: 36.8,
-    },
-  ]
+  // const pots = [
+  //   {
+  //     title: 'Savings',
+  //     color: 'green',
+  //     saved: 159,
+  //     target: 2000,
+  //     percent: 7.95,
+  //   },
+  //   {
+  //     title: 'Concert Ticket',
+  //     color: 'gray',
+  //     saved: 110,
+  //     target: 150,
+  //     percent: 73.3,
+  //   },
+  //   {
+  //     title: 'Gift',
+  //     color: 'blue',
+  //     saved: 40,
+  //     target: 60,
+  //     percent: 66.6,
+  //   },
+  //   {
+  //     title: 'New Laptop',
+  //     color: 'orange',
+  //     saved: 10,
+  //     target: 1000,
+  //     percent: 1,
+  //   },
+  //   {
+  //     title: 'Holiday',
+  //     color: 'purple',
+  //     saved: 531,
+  //     target: 1440,
+  //     percent: 36.8,
+  //   },
+  // ]
 
   const COLOR_OPTIONS = [
     { value: 'green', label: 'Green', color: '#1f7a6d' },
@@ -89,6 +96,141 @@ export default function Pots() {
     { value: 'pink', label: 'Pink', color: '#f472b6' },
     { value: 'gold', label: 'Gold', color: '#d4af37' },
     { value: 'orange', label: 'Orange', color: '#f2994a' },
+  ]
+
+  const fetchPotsLists = async () => {
+    try {
+      const data = await ApiService.fetchPotsLists()
+      setPots(data)
+    } catch (error) {
+      setErrors('Failed to load pots lists')
+    }
+  }
+
+  useEffect(() => {
+    fetchPotsLists()
+  }, [])
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setErrors([])
+
+    try {
+      const data = await ApiService.createPot({
+        name: form.name,
+        color: form.color,
+        target: form.target,
+      })
+
+      setPots((prev) => [...prev, data])
+      setOpen(false)
+
+      setForm({
+        name: '',
+        target: '',
+        color: 'green',
+      })
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Pot Created',
+        text: 'Your Pot has been created successfully!',
+        confirmButtonColor: '#111318',
+      })
+    } catch (err) {
+      setErrors(err.errors || ['Pot Creation failed'])
+    }
+  }
+
+  const handleUpdate = async () => {
+    try {
+      const updated = await ApiService.updatePot(selectedPot.id, {
+        name: form.name,
+        color: form.color,
+        target: form.target,
+      })
+
+      setPots((prev) => prev.map((b) => (b.id === updated.id ? updated : b)))
+      setSelectedPot(null)
+      setEditOpen(false)
+      Swal.fire({
+        icon: 'success',
+        title: 'Pot Updated',
+        text: 'Pot updated successfully!',
+        confirmButtonColor: '#111318',
+      })
+    } catch (err) {
+      setErrors(err.errors)
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!selectedPot) return
+
+    const id = selectedPot.id
+
+    const previousPots = [...pots]
+
+    try {
+      setPots((prev) => prev.filter((b) => b.id !== id))
+      setDeleteOpen(false)
+
+      await ApiService.deletePot(id)
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Pot Deleted',
+        text: 'Pot Deleted successfully!',
+        confirmButtonColor: '#111318',
+      })
+    } catch (err) {
+      setPots(previousPots)
+      Swal.fire('Error', err?.errors?.[0] || 'Failed to delete Pot', 'error')
+    } finally {
+      setSelectedPot(null)
+    }
+  }
+
+  const addMoney = async (id, amount) => {
+    if (!amount || amount <= 0) return
+    setErrors([])
+
+    try {
+      const data = await ApiService.addMoney(id, { amount })
+
+      setPots((prev) => prev.map((pot) => (pot.id === id ? data : pot)))
+      Swal.fire({
+        icon: 'success',
+        title: 'Money Added',
+        text: 'Amount added to pot successfully!',
+        confirmButtonColor: '#111318',
+      })
+    } catch (err) {
+      setErrors(err.errors || ['Pot Creation failed'])
+    }
+  }
+
+  const withdrawMoney = async (id, amount) => {
+    if (!amount || amount <= 0) return
+    setErrors([])
+
+    try {
+      const data = await ApiService.withdrawMoney(id, { amount })
+
+      setPots((prev) => prev.map((pot) => (pot.id === id ? data : pot)))
+      Swal.fire({
+        icon: 'success',
+        title: 'Money Withdrawn',
+        text: 'Amount Withdrawn successfully!',
+        confirmButtonColor: '#111318',
+      })
+    } catch (err) {
+      setErrors(err.errors || ['Amount Withdrawn failed'])
+    }
+  }
+
+  const usedColors = [
+    ...new Set(pots.map((b) => b.color?.trim().toLowerCase())),
   ]
 
   return (
@@ -109,12 +251,19 @@ export default function Pots() {
             {...pot}
             onEdit={() => {
               setSelectedPot(pot)
+              setForm({
+                name: pot.title,
+                target: pot.target,
+                color: pot.color,
+              })
               setEditOpen(true)
             }}
             onDelete={() => {
               setSelectedPot(pot)
               setDeleteOpen(true)
             }}
+            onAddMoney={addMoney}
+            onWithdrawMoney={withdrawMoney}
           />
         ))}
       </div>
@@ -126,8 +275,6 @@ export default function Pots() {
           if (reason === 'backdropClick') return
           setOpen(false)
         }}
-        maxWidth="sm"
-        fullWidth
         BackdropProps={{
           sx: {
             backgroundColor: 'rgba(0,0,0,0.45)',
@@ -136,8 +283,10 @@ export default function Pots() {
         }}
         PaperProps={{
           sx: {
+            width: { xs: '90%', sm: '480px' },
+            maxWidth: '480px',
+            maxHeight: '480px',
             borderRadius: '14px',
-            padding: '10px',
           },
         }}
       >
@@ -154,14 +303,30 @@ export default function Pots() {
             track as you save for special purchases.
           </p>
 
+          {Array.isArray(errors) && errors.length > 0 && (
+            <Box
+              sx={{
+                color: '#c0392b',
+                fontSize: '15px',
+                marginLeft: '25px',
+              }}
+            >
+              {errors.map((err, index) => (
+                <div key={index}>• {err}</div>
+              ))}
+            </Box>
+          )}
+
           <DialogContent>
-            <div className="pot-form">
+            <form className="pot-form" onSubmit={handleSubmit}>
               <label>Pot Name</label>
               <TextField
                 fullWidth
                 size="small"
                 type="text"
                 placeholder="Rainy Days"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
               />
               <span>0 of 30 Characters Left</span>
 
@@ -176,6 +341,8 @@ export default function Pots() {
                     <InputAdornment position="start">$</InputAdornment>
                   ),
                 }}
+                value={form.target}
+                onChange={(e) => setForm({ ...form, target: e.target.value })}
               />
 
               <label>Theme</label>
@@ -183,42 +350,68 @@ export default function Pots() {
                 select
                 fullWidth
                 size="small"
-                value={form.theme}
-                onChange={(e) => setForm({ ...form, theme: e.target.value })}
+                value={form.color}
+                onChange={(e) => setForm({ ...form, color: e.target.value })}
               >
-                {COLOR_OPTIONS.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    <Box
+                {COLOR_OPTIONS.map((option) => {
+                  const isUsed = usedColors.includes(option.value.toLowerCase())
+
+                  return (
+                    <MenuItem
+                      key={option.value}
+                      value={option.value}
+                      disabled={isUsed}
                       sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        width: '100%',
+                        opacity: isUsed ? 0.5 : 1,
+                        cursor: isUsed ? 'not-allowed' : 'pointer',
                       }}
                     >
                       <Box
-                        sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          width: '100%',
+                        }}
                       >
                         <Box
                           sx={{
-                            width: 12,
-                            height: 12,
-                            borderRadius: '50%',
-                            backgroundColor: option.color,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1.5,
                           }}
-                        />
-                        <Typography fontSize={14}>{option.label}</Typography>
-                      </Box>
+                        >
+                          <Box
+                            sx={{
+                              width: 12,
+                              height: 12,
+                              borderRadius: '50%',
+                              backgroundColor: option.color,
+                            }}
+                          />
+                          <Typography fontSize={14}>{option.label}</Typography>
+                        </Box>
 
-                      {form.theme === option.value && (
-                        <CheckIcon fontSize="small" sx={{ color: '#1f7a6d' }} />
-                      )}
-                    </Box>
-                  </MenuItem>
-                ))}
+                        {isUsed ? (
+                          <Typography fontSize={12} color="text.secondary">
+                            Already used
+                          </Typography>
+                        ) : (
+                          form.color === option.value && (
+                            <CheckIcon
+                              fontSize="small"
+                              sx={{ color: '#1f7a6d' }}
+                            />
+                          )
+                        )}
+                      </Box>
+                    </MenuItem>
+                  )
+                })}
               </TextField>
 
               <Button
+                type="submit"
                 variant="contained"
                 className="submit-pot-btn"
                 fullWidth
@@ -228,7 +421,7 @@ export default function Pots() {
               >
                 Add Pot
               </Button>
-            </div>
+            </form>
           </DialogContent>
         </div>
       </Dialog>
@@ -240,8 +433,6 @@ export default function Pots() {
           if (reason === 'backdropClick') return
           setEditOpen(false)
         }}
-        maxWidth="sm"
-        fullWidth
         BackdropProps={{
           sx: {
             backgroundColor: 'rgba(0,0,0,0.45)',
@@ -250,8 +441,10 @@ export default function Pots() {
         }}
         PaperProps={{
           sx: {
+            width: { xs: '90%', sm: '480px' },
+            maxWidth: '480px',
+            maxHeight: '480px',
             borderRadius: '14px',
-            padding: '10px',
           },
         }}
       >
@@ -267,8 +460,22 @@ export default function Pots() {
             If your saving targets change, feel free to update your pots.
           </p>
 
+          {Array.isArray(errors) && errors.length > 0 && (
+            <Box
+              sx={{
+                color: '#c0392b',
+                fontSize: '15px',
+                marginLeft: '25px',
+              }}
+            >
+              {errors.map((err, index) => (
+                <div key={index}>• {err}</div>
+              ))}
+            </Box>
+          )}
+
           <DialogContent>
-            <div className="pot-form">
+            <form className="pot-form" onSubmit={handleUpdate} noValidate>
               <label>Pot Name</label>
               <TextField
                 fullWidth
@@ -284,8 +491,8 @@ export default function Pots() {
                 fullWidth
                 size="small"
                 type="number"
-                value={form?.limit || ''}
-                onChange={(e) => setForm({ ...form, limit: e.target.value })}
+                value={form?.target || ''}
+                onChange={(e) => setForm({ ...form, target: e.target.value })}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">$</InputAdornment>
@@ -298,42 +505,68 @@ export default function Pots() {
                 select
                 fullWidth
                 size="small"
-                value={form?.theme || ''}
-                onChange={(e) => setForm({ ...form, theme: e.target.value })}
+                value={form?.color || ''}
+                onChange={(e) => setForm({ ...form, color: e.target.value })}
               >
-                {COLOR_OPTIONS.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    <Box
+                {COLOR_OPTIONS.map((option) => {
+                  const isUsed = usedColors.includes(option.value.toLowerCase())
+
+                  return (
+                    <MenuItem
+                      key={option.value}
+                      value={option.value}
+                      disabled={isUsed}
                       sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        width: '100%',
+                        opacity: isUsed ? 0.5 : 1,
+                        cursor: isUsed ? 'not-allowed' : 'pointer',
                       }}
                     >
                       <Box
-                        sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          width: '100%',
+                        }}
                       >
                         <Box
                           sx={{
-                            width: 12,
-                            height: 12,
-                            borderRadius: '50%',
-                            backgroundColor: option.color,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1.5,
                           }}
-                        />
-                        <Typography fontSize={14}>{option.label}</Typography>
-                      </Box>
+                        >
+                          <Box
+                            sx={{
+                              width: 12,
+                              height: 12,
+                              borderRadius: '50%',
+                              backgroundColor: option.color,
+                            }}
+                          />
+                          <Typography fontSize={14}>{option.label}</Typography>
+                        </Box>
 
-                      {form.theme === option.value && (
-                        <CheckIcon fontSize="small" sx={{ color: '#1f7a6d' }} />
-                      )}
-                    </Box>
-                  </MenuItem>
-                ))}
+                        {isUsed ? (
+                          <Typography fontSize={12} color="text.secondary">
+                            Already used
+                          </Typography>
+                        ) : (
+                          form.color === option.value && (
+                            <CheckIcon
+                              fontSize="small"
+                              sx={{ color: '#1f7a6d' }}
+                            />
+                          )
+                        )}
+                      </Box>
+                    </MenuItem>
+                  )
+                })}
               </TextField>
 
               <Button
+                type="submit"
                 variant="contained"
                 className="submit-pot-btn"
                 fullWidth
@@ -343,7 +576,7 @@ export default function Pots() {
               >
                 Save Changes
               </Button>
-            </div>
+            </form>
           </DialogContent>
         </div>
       </Dialog>
@@ -386,6 +619,7 @@ export default function Pots() {
             <div className="pot-delete-form">
               <Button
                 fullWidth
+                onClick={handleDelete}
                 sx={{
                   background: '#c0392b',
                   color: '#fff',
@@ -415,12 +649,24 @@ export default function Pots() {
   )
 }
 
-function PotCard({ title, color, saved, target, percent, onEdit, onDelete }) {
+function PotCard({
+  id,
+  title,
+  color,
+  saved,
+  target,
+  percent,
+  onEdit,
+  onDelete,
+  onAddMoney,
+  onWithdrawMoney,
+}) {
   const [openMenu, setOpenMenu] = useState(false)
   const menuRef = useRef(null)
 
   const [addMoney, setAddMoney] = useState(false)
   const [withdraw, setWithdraw] = useState(false)
+  const [amount, setAmount] = useState('')
 
   const handleClickOpenAddMoney = () => {
     setAddMoney(true)
@@ -511,10 +757,10 @@ function PotCard({ title, color, saved, target, percent, onEdit, onDelete }) {
         }}
         PaperProps={{
           sx: {
-            width: { xs: '90%', sm: '520px' },
-            maxWidth: '520px',
+            width: { xs: '90%', sm: '480px' },
+            maxWidth: '480px',
+            maxHeight: '480px',
             borderRadius: '14px',
-            padding: '10px',
           },
         }}
       >
@@ -537,7 +783,7 @@ function PotCard({ title, color, saved, target, percent, onEdit, onDelete }) {
           <div className="pot-add-summary">
             <div className="pot-add-top">
               <span className="label">New Amount</span>
-              <span className="amount">${(saved + 400).toFixed(2)}</span>
+              <span className="amount">${saved.toFixed(2)}</span>
             </div>
 
             <div className="progress-bar">
@@ -562,6 +808,8 @@ function PotCard({ title, color, saved, target, percent, onEdit, onDelete }) {
                 size="small"
                 type="number"
                 placeholder="400"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">$</InputAdornment>
@@ -577,6 +825,11 @@ function PotCard({ title, color, saved, target, percent, onEdit, onDelete }) {
                   textTransform: 'none',
                 }}
                 variant="contained"
+                onClick={() => {
+                  onAddMoney(id, Number(amount))
+                  setAmount('')
+                  setAddMoney(false)
+                }}
               >
                 Confirm Addition
               </Button>
@@ -625,7 +878,7 @@ function PotCard({ title, color, saved, target, percent, onEdit, onDelete }) {
           <div className="pot-add-summary">
             <div className="pot-add-top">
               <span className="label">New Amount</span>
-              <span className="amount">${(saved - 20).toFixed(2)}</span>
+              <span className="amount">${saved.toFixed(2)}</span>
             </div>
 
             <div className="progress-bar">
@@ -654,6 +907,8 @@ function PotCard({ title, color, saved, target, percent, onEdit, onDelete }) {
                     <InputAdornment position="start">$</InputAdornment>
                   ),
                 }}
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
               />
 
               <Button
@@ -661,6 +916,11 @@ function PotCard({ title, color, saved, target, percent, onEdit, onDelete }) {
                 className="submit-pot-btn danger"
                 sx={{ mt: 2, textTransform: 'none' }}
                 variant="contained"
+                onClick={() => {
+                  onWithdrawMoney(id, Number(amount))
+                  setAmount('')
+                  setWithdraw(false)
+                }}
               >
                 Confirm Withdrawal
               </Button>

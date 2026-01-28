@@ -49,6 +49,7 @@ const handleError = (error, defaultMsg) => {
 }
 
 const ApiService = {
+  /* ================= Budget ================= */
   fetchBudgetLists: async () => {
     try {
       const response = await apiClient.get('/budgets')
@@ -82,6 +83,61 @@ const ApiService = {
       return true
     } catch (e) {
       handleError(e, 'Failed to delete budget')
+    }
+  },
+
+  /* ================= Pot ================= */
+  fetchPotsLists: async () => {
+    try {
+      const response = await apiClient.get('/pots')
+      return response.data
+    } catch (error) {
+      handleError(error, 'Failed to load pots')
+    }
+  },
+
+  createPot: async (potData) => {
+    try {
+      const response = await apiClient.post('/pots', potData)
+      return response.data
+    } catch (error) {
+      handleError(error, 'Failed to create pot')
+    }
+  },
+
+  updatePot: async (id, pot) => {
+    try {
+      const res = await apiClient.put(`/pots/${id}`, { pot })
+      return res.data
+    } catch (e) {
+      handleError(e, 'Failed to update pot')
+    }
+  },
+
+  deletePot: async (id) => {
+    try {
+      await apiClient.delete(`/pots/${id}`)
+      return true
+    } catch (e) {
+      handleError(e, 'Failed to delete pot')
+    }
+  },
+
+  addMoney: async (id, amount) => {
+    try {
+      const res = await apiClient.post(`/pots/${id}/add_money`, { amount })
+      return res.data
+    } catch (e) {
+      handleError(e, 'Failed to add amount')
+    }
+  },
+
+  withdrawMoney: async (id, amount) => {
+    try {
+      const res = await apiClient.post(`/pots/${id}/withdraw`, { amount })
+      return res.data
+    } catch (e) {
+      handleError(e, 'Failed to withdraw amount')
     }
   },
 }

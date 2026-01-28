@@ -166,7 +166,7 @@
 /* ================= MODAL ================= */
 
 .pot-modal {
-  padding: 0px 20px 0px;
+  padding: 15px 20px 0px;
 }
 
 .pot-modal-header {
@@ -209,6 +209,11 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .pot-delete-form {
