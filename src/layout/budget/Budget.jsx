@@ -72,6 +72,50 @@ export default function Budgets() {
     { value: 'orange', label: 'Orange', color: '#f2994a' },
   ]
 
+  const buildDonutGradient = (budgets) => {
+    const total = budgets.reduce((sum, b) => sum + Number(b.max || 0), 0)
+
+    if (total === 0) {
+      return '#eee 0deg 360deg'
+    }
+
+    let currentAngle = 0
+    const segments = budgets.map((b) => {
+      const value = Number(b.max || 0)
+      const angle = (value / total) * 360
+
+      const start = currentAngle
+      const end = currentAngle + angle
+      currentAngle = end
+
+      return `${getColorHex(b.color)} ${start}deg ${end}deg`
+    })
+
+    return segments.join(', ')
+  }
+
+  const getColorHex = (color) => {
+    const map = {
+      green: '#1f7a6d',
+      yellow: '#f2c94c',
+      cyan: '#56ccf2',
+      navy: '#1f2a44',
+      red: '#eb5757',
+      purple: '#9b51e0',
+      turquoise: '#2dd4bf',
+      brown: '#8d6e63',
+      magenta: '#d63384',
+      blue: '#2f80ed',
+      navyGrey: '#6b7280',
+      armyGreen: '#6b8e23',
+      pink: '#f472b6',
+      gold: '#d4af37',
+      orange: '#f2994a',
+    }
+
+    return map[color] || '#ccc'
+  }
+
   const fetchBudgetLists = async () => {
     try {
       const data = await ApiService.fetchBudgetLists()
@@ -185,7 +229,12 @@ export default function Budgets() {
       <div className="budgets-grid">
         <div className="budget-summary-card">
           <div className="donut-wrapper">
-            <div className="donut">
+            <div
+              className="donut"
+              style={{
+                background: `conic-gradient(${buildDonutGradient(budgets)})`,
+              }}
+            >
               <div className="donut-center">
                 <h2>${totalSpent.toFixed(2)}</h2>
                 <p>of ${totalLimit.toFixed(2)} limit</p>
@@ -558,7 +607,7 @@ export default function Budgets() {
         </div>
       </Dialog>
 
-      {/* ================= DELETE MODAL ================= */}
+      {/* ===== DELETE BUDGET MODAL ===== */}
       <Dialog
         open={deleteOpen}
         onClose={(event, reason) => {
