@@ -68,8 +68,8 @@ body {
 
 .dashboard-main {
   flex: 1;
-  padding: 30px;
-  margin-left: 240px;
+  padding: 20px;
+  margin-left: 230px;
   overflow-y: auto;
 }
 
@@ -339,7 +339,7 @@ body {
   }
 
   .dashboard-main {
-    margin-left: 200px;
+    margin-left: 220px;
     padding: 24px;
   }
 
@@ -354,7 +354,7 @@ body {
 
 @media (max-width: 900px) and (min-width: 769px) {
   .dashboard-main {
-    margin-left: 200px;
+    margin-left: 220px;
     padding: 20px;
   }
 

@@ -142,5 +142,26 @@ const ApiService = {
       handleError(e, 'Failed to withdraw amount')
     }
   },
+
+  /* ================= Recurring Bills ================= */
+  fetchBillsLists: async () => {
+    try {
+      const response = await apiClient.get('/recurring_bills')
+      return response.data
+    } catch (error) {
+      handleError(error, 'Failed to load bills')
+    }
+  },
+
+  createBill: async (billData) => {
+    try {
+      const response = await apiClient.post('/recurring_bills', {
+        recurring_bill: billData,
+      })
+      return response.data
+    } catch (error) {
+      handleError(error, 'Failed to create bill')
+    }
+  },
 }
 export default ApiService

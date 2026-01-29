@@ -122,6 +122,27 @@
   padding-bottom: 10px;
 }
 
+.bills-headers {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.bills-header h1 {
+  font-size: 22px;
+}
+
+.add-bills-btn {
+  background: #18191e;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+}
+
 /* ROW */
 .bill-row {
   display: grid;
@@ -212,6 +233,86 @@
   background: #eee;
 }
 
+.bill-modal {
+  padding: 10px 16px 20px;
+}
+
+.bill-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bill-delete-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bill-modal-header h3 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.bill-modal-desc {
+  font-size: 13px;
+  color: #777;
+  margin: 8px 0 18px;
+}
+
+.bill-delete-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.bill-delete-modal-desc {
+  font-size: 13px;
+  color: #777;
+  margin: 8px 0 18px;
+}
+
+.bill-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.bill-delete-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: -35px;
+}
+
+.bill-form label {
+  font-size: 13px;
+  color: #555;
+}
+
+.currency {
+  margin-right: 6px;
+  color: #555;
+}
+
+.submit-bill-btn {
+  background: #18191e !important;
+  padding: 12px !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  margin-top: 10px !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #18191e !important;
+}
+
 /* ===================== TABLET ===================== */
 @media (max-width: 1024px) {
   .bills-layout {
@@ -274,5 +375,10 @@
   .bills-summary {
     display: flex;
     flex-direction: column;
+  }
+
+  .add-bills-btn {
+    width: 100%;
+    text-align: center;
   }
 }
