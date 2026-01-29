@@ -183,12 +183,21 @@ export default function RecurringBills() {
   const upcomingAmount = sumAmount(upcomingBills)
   const dueAmount = sumAmount(dueBills)
 
-  const getBillStatus = (bill) => {
-    const today = dayjs()
-    const runDate = dayjs(bill.next_run_on)
+  const daysUntil = (date) => {
+    return dayjs(date).startOf('day').diff(dayjs().startOf('day'), 'day')
+  }
 
-    if (runDate.isSame(today, 'day')) return 'due'
-    if (runDate.isBefore(today, 'day')) return 'paid'
+  const STATUS_ICON = {
+    paid: '✅',
+    due: '❗',
+    upcoming: '⏳',
+  }
+
+  const getBillStatus = (bill) => {
+    const days = daysUntil(bill.next_run_on)
+
+    if (days < 0) return 'paid'
+    if (days <= 10) return 'due'
     return 'upcoming'
   }
 
@@ -368,7 +377,7 @@ export default function RecurringBills() {
               <div className="bill-row" key={bill.id}>
                 <div className="bill-left">
                   <div className={`bill-icon ${status}`}>
-                    {status === 'paid' ? '✅' : status === 'due' ? '⏰' : '📅'}
+                    {STATUS_ICON[status]}
                   </div>
 
                   <div>

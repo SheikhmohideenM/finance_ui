@@ -104,7 +104,7 @@
   padding: 8px 12px;
   border-radius: 10px;
   border: 1px solid #ddd;
-  width: 220px;
+  width: 280px;
 }
 
 .bills-filters select {
@@ -188,6 +188,38 @@
 
 .bill-status.due {
   color: #b91c1c;
+}
+
+/* STATUS COLORS */
+.bill-status.paid,
+.bill-amount.paid {
+  color: #0f766e; /* green */
+}
+
+.bill-status.due,
+.bill-amount.due {
+  color: #dc2626; /* red */
+}
+
+.bill-status.upcoming,
+.bill-amount.upcoming {
+  color: #6b7280; /* gray */
+}
+
+/* ICON COLORS */
+.bill-icon.paid {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.bill-icon.due {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.bill-icon.upcoming {
+  background: #e5e7eb;
+  color: #374151;
 }
 
 /* AMOUNT */
