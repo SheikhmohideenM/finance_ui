@@ -43,7 +43,7 @@ export default function SideNav({ onLogout }) {
 
         <button className="logout-btn item" onClick={onLogout}>
           <BiLogOutCircle className="logout" />
-          Logout
+          <span className="label">Logout</span>
         </button>
       </nav>
     </aside>

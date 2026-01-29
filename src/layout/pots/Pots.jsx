@@ -709,7 +709,7 @@ function PotCard({
         </div>
       </div>
 
-      <p className="label">Total Saved</p>
+      <p className="totalSaved">Total Saved</p>
       <h2 className="amount">${saved.toFixed(2)}</h2>
 
       <div className="progress-wrapper">

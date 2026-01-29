@@ -316,7 +316,7 @@ export default function Budgets() {
             {budgets.map((b) => (
               <li key={b.id}>
                 <span className={`bar ${b.color}`}></span>
-                <span className="label">{b.title}</span>
+                <span className="budgetLabel">{b.title}</span>
                 <span className="value">
                   <strong>${Number(b.spent).toFixed(2)}</strong>{' '}
                   <em>of ${Number(b.max).toFixed(2)}</em>
