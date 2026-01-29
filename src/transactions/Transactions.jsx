@@ -147,9 +147,9 @@ export default function Transactions() {
         </div>
 
         <div className="table-header">
-          <span>Recipient</span>
+          <span>Recipient / Sender</span>
           <span>Category</span>
-          <span>Date</span>
+          <span>Transaction Date</span>
           <span className="amount-col">Amount</span>
         </div>
 
