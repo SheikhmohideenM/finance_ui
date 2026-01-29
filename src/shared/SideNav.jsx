@@ -23,22 +23,22 @@ export default function SideNav({ onLogout }) {
 
         <NavLink to="/transactions" className="item">
           <FiRepeat />
-          <span>Transactions</span>
+          <span className="label">Transactions</span>
         </NavLink>
 
         <NavLink to="/budgets" className="item">
           <FiPieChart />
-          <span>Budgets</span>
+          <span className="label">Budgets</span>
         </NavLink>
 
         <NavLink to="/pots" className="item">
           <FiDollarSign />
-          <span>Pots</span>
+          <span className="label">Pots</span>
         </NavLink>
 
         <NavLink to="/recurringBills" className="item">
           <FiFileText />
-          <span>Recurring Bills</span>
+          <span className="label">Recurring Bills</span>
         </NavLink>
 
         <button className="logout-btn item" onClick={onLogout}>

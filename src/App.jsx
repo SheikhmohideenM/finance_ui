@@ -29,10 +29,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Redirect */}
         <Route path="/" element={<Navigate to="/login" />} />
 
-        {/* Auth */}
         <Route
           path="/login"
           element={<Login onLogin={() => setLoggedIn(true)} />}
@@ -42,7 +40,6 @@ function App() {
           element={<SignUp onSignup={() => setLoggedIn(true)} />}
         />
 
-        {/* 🔐 PROTECTED APP LAYOUT */}
         <Route
           element={
             <ProtectedRoute loggedIn={loggedIn}>
@@ -50,7 +47,6 @@ function App() {
             </ProtectedRoute>
           }
         >
-          {/* 🔥 ALL THESE SHARE THE SAME SIDENAV */}
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/budgets" element={<Budget />} />

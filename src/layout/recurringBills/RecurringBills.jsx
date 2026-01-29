@@ -319,16 +319,25 @@ export default function RecurringBills() {
 
         <div className="bills-table-card">
           <div className="bills-filters">
-            <input placeholder="Search bills" />
+            <div className="input-field">
+              <input placeholder="Search bills" />
+            </div>
             <div className="sort-wrapper" ref={sortRef}>
-              <span className="sort-label">Sort by</span>
-
+              <span className="sort-label desktop-only">Sort by</span>
               <button
-                className="sort-btn"
+                className="sort-btn desktop-only"
                 onClick={() => setSortOpen((o) => !o)}
               >
                 {sortValue}
                 <span className="caret">▾</span>
+              </button>
+
+              <button
+                className="sort-icon-btn mobile-only"
+                onClick={() => setSortOpen((o) => !o)}
+                aria-label="Sort"
+              >
+                ☰
               </button>
 
               {sortOpen && (
@@ -374,7 +383,7 @@ export default function RecurringBills() {
             const cycleText = getCycleText(bill)
 
             return (
-              <div className="bill-row" key={bill.id}>
+              <div className="bill-row mobile-card" key={bill.id}>
                 <div className="bill-left">
                   <div className={`bill-icon ${status}`}>
                     {STATUS_ICON[status]}
