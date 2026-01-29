@@ -404,7 +404,7 @@ export default function RecurringBills() {
         </div>
       </div>
 
-      {/* ===== ADD bill MODAL ===== */}
+      {/* ===== ADD BILL MODAL ===== */}
       <Dialog
         open={open}
         onClose={(event, reason) => {

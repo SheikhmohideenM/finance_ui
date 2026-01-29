@@ -16,6 +16,10 @@ body {
   background: #f6f2ee;
 }
 
+.dashboard-page {
+  padding: 24px;
+}
+
 .sidenav {
   position: fixed;
   top: 0;

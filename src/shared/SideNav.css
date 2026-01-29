@@ -12,6 +12,10 @@
   flex-direction: column;
   padding: 24px 16px;
   z-index: 100;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-bottom: 20px;
+  transition: all 0.3s ease-in-out;
 }
 
 .logo {
@@ -144,4 +148,17 @@
   .logout-btn {
     display: none;
   }
+}
+
+::-webkit-scrollbar {
+  width: 5px !important;
+  height: 5px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #141414 !important;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent !important;
 }
