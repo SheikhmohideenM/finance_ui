@@ -128,6 +128,49 @@ export default function RecurringBills() {
     fetchBudgetLists()
   }, [])
 
+  const selectedBudget = budgets.find((b) => b.id === Number(form.budget_id))
+
+  const isBudgetExhausted = selectedBudget && selectedBudget.remaining <= 0
+
+  const calculateNextRunDate = (frequency) => {
+    const today = dayjs()
+    switch (frequency) {
+      case 'weekly':
+        return today.add(1, 'week')
+      case 'monthly':
+        return today.add(1, 'month')
+      case 'yearly':
+        return today.add(1, 'year')
+      default:
+        return null
+    }
+  }
+
+  useEffect(() => {
+    const date = calculateNextRunDate(form.frequency)
+    if (date) {
+      setForm((prev) => ({
+        ...prev,
+        next_run_on: date.format('YYYY-MM-DD'),
+      }))
+    }
+  }, [form.frequency])
+
+  useEffect(() => {
+    if (form.auto_pay && selectedBudget) {
+      setForm((prev) => ({
+        ...prev,
+        amount: selectedBudget.remaining,
+      }))
+    }
+  }, [form.auto_pay, form.budget_id])
+
+  useEffect(() => {
+    if (isBudgetExhausted && form.auto_pay) {
+      setForm((prev) => ({ ...prev, auto_pay: false }))
+    }
+  }, [isBudgetExhausted])
+
   const handleCreate = async (e) => {
     e.preventDefault()
     setErrors([])
@@ -143,13 +186,13 @@ export default function RecurringBills() {
         budget_id: form.budget_id,
       })
 
-      setBudgets((prev) => [...prev, data])
+      setBills((prev) => [...prev, data])
       setOpen(false)
 
       setForm({
         name: '',
         amount: '',
-        frequency: '',
+        frequency: 'monthly',
         next_run_on: '',
         auto_pay: false,
         account_id: 1,
@@ -313,10 +356,24 @@ export default function RecurringBills() {
                 fullWidth
                 size="small"
                 value={form.budget_id}
+                displayEmpty
+                renderValue={(selected) => {
+                  if (!selected) {
+                    return (
+                      <span style={{ color: '#999' }}>Select Category</span>
+                    )
+                  }
+                  const budget = budgets.find((b) => b.id === selected)
+                  return budget ? budget.title : ''
+                }}
                 onChange={(e) =>
                   setForm({ ...form, budget_id: e.target.value })
                 }
               >
+                <MenuItem value="" disabled>
+                  Select Category
+                </MenuItem>
+
                 {budgets.map((b) => (
                   <MenuItem key={b.id} value={b.id}>
                     {b.title}
@@ -357,6 +414,7 @@ export default function RecurringBills() {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <label>Next Run On</label>
                 <DatePicker
+                  minDate={dayjs()}
                   value={form.next_run_on ? dayjs(form.next_run_on) : null}
                   onChange={(newValue) => {
                     setForm({
@@ -379,6 +437,7 @@ export default function RecurringBills() {
                 control={
                   <Switch
                     checked={form.auto_pay}
+                    disabled={isBudgetExhausted}
                     onChange={(e) =>
                       setForm({ ...form, auto_pay: e.target.checked })
                     }

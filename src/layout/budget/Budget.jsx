@@ -384,8 +384,8 @@ export default function Budgets() {
           </div>
 
           <p className="budget-modal-desc">
-            Choose a category to set a spending budget. These categories can
-            help you monitor spending.
+            Choose a Bill to set a spending budget. These categories can help
+            you monitor spending.
           </p>
 
           {Array.isArray(errors) && errors.length > 0 && (
