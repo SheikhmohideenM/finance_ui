@@ -163,5 +163,26 @@ const ApiService = {
       handleError(error, 'Failed to create bill')
     }
   },
+
+  /* ================= Transaction Bills ================= */
+  fetchTransactionLists: async () => {
+    try {
+      const response = await apiClient.get('/transactions')
+      return response.data
+    } catch (error) {
+      handleError(error, 'Failed to load bills')
+    }
+  },
+
+  createTransaction: async (transactionData) => {
+    try {
+      const response = await apiClient.post('/transactions', {
+        transaction: transactionData,
+      })
+      return response.data
+    } catch (error) {
+      handleError(error, 'Failed to Create Transaction')
+    }
+  },
 }
 export default ApiService

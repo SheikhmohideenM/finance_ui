@@ -174,7 +174,6 @@ export default function RecurringBills() {
     dayjs(b.next_run_on).isAfter(today, 'day'),
   )
 
-  // totals
   const sumAmount = (arr) =>
     arr.reduce((sum, b) => sum + Number(b.amount || 0), 0)
 
