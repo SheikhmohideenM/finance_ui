@@ -3,7 +3,7 @@
 
 import '../recurringBills/RecurringBills.css'
 
-import { React, useEffect, useState } from 'react'
+import { React, useEffect, useRef, useState } from 'react'
 
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
@@ -28,58 +28,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 
 import ApiService from '../../services/ApiService'
 
-const BILLS = [
-  {
-    name: 'Elevate Education',
-    cycle: 'Monthly · 1st',
-    amount: 250,
-    status: 'paid',
-    icon: '🎓',
-  },
-  {
-    name: 'Bravo Zen Spa',
-    cycle: 'Monthly · 5th',
-    amount: 70,
-    status: 'paid',
-    icon: '💆',
-  },
-  {
-    name: 'Charlie Electric Company',
-    cycle: 'Monthly · 7th',
-    amount: 100,
-    status: 'due',
-    icon: '⚡',
-  },
-  {
-    name: 'Delta Taxi',
-    cycle: 'Monthly · 9th',
-    amount: 30,
-    status: 'paid',
-    icon: '🚕',
-  },
-  {
-    name: 'Echo Game Store',
-    cycle: 'Monthly · 10th',
-    amount: 5,
-    status: 'paid',
-    icon: '🎮',
-  },
-  {
-    name: 'Tango Gas Company',
-    cycle: 'Monthly · 23rd',
-    amount: 225,
-    status: 'paid',
-    icon: '⛽',
-  },
-  {
-    name: 'Juliet Restaurant',
-    cycle: 'Monthly · 28th',
-    amount: 90,
-    status: 'paid',
-    icon: '🍽️',
-  },
-]
-
 export default function RecurringBills() {
   const [open, setOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
@@ -87,6 +35,47 @@ export default function RecurringBills() {
   const [error, setError] = useState(null)
   const [selectedBill, setSelectedBill] = useState(null)
   const navigate = useNavigate()
+
+  const [sortOpen, setSortOpen] = useState(false)
+  const [sortValue, setSortValue] = useState('Latest')
+  const sortRef = useRef(null)
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (sortRef.current && !sortRef.current.contains(e.target)) {
+        setSortOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  const getSortedBills = () => {
+    const sorted = [...bills]
+
+    switch (sortValue) {
+      case 'Latest':
+        return sorted.sort((a, b) => dayjs(b.created_at) - dayjs(a.created_at))
+
+      case 'Oldest':
+        return sorted.sort((a, b) => dayjs(a.created_at) - dayjs(b.created_at))
+
+      case 'A to Z':
+        return sorted.sort((a, b) => a.name.localeCompare(b.name))
+
+      case 'Z to A':
+        return sorted.sort((a, b) => b.name.localeCompare(a.name))
+
+      case 'Highest':
+        return sorted.sort((a, b) => b.amount - a.amount)
+
+      case 'Lowest':
+        return sorted.sort((a, b) => a.amount - b.amount)
+
+      default:
+        return sorted
+    }
+  }
 
   const [form, setForm] = useState({
     name: '',
@@ -171,6 +160,68 @@ export default function RecurringBills() {
     }
   }, [isBudgetExhausted])
 
+  const today = dayjs()
+
+  const paidBills = bills.filter((b) =>
+    dayjs(b.next_run_on).isBefore(today, 'day'),
+  )
+
+  const dueBills = bills.filter((b) =>
+    dayjs(b.next_run_on).isSame(today, 'day'),
+  )
+
+  const upcomingBills = bills.filter((b) =>
+    dayjs(b.next_run_on).isAfter(today, 'day'),
+  )
+
+  // totals
+  const sumAmount = (arr) =>
+    arr.reduce((sum, b) => sum + Number(b.amount || 0), 0)
+
+  const totalBillsAmount = sumAmount(bills)
+  const paidAmount = sumAmount(paidBills)
+  const upcomingAmount = sumAmount(upcomingBills)
+  const dueAmount = sumAmount(dueBills)
+
+  const getBillStatus = (bill) => {
+    const today = dayjs()
+    const runDate = dayjs(bill.next_run_on)
+
+    if (runDate.isSame(today, 'day')) return 'due'
+    if (runDate.isBefore(today, 'day')) return 'paid'
+    return 'upcoming'
+  }
+
+  const getCycleText = (bill) => {
+    const date = dayjs(bill.next_run_on)
+    const day = date.format('D')
+
+    switch (bill.frequency) {
+      case 'weekly':
+        return `Weekly · ${date.format('ddd')}`
+      case 'monthly':
+        return `Monthly · ${day}${getDaySuffix(day)}`
+      case 'yearly':
+        return `Yearly · ${date.format('MMM D')}`
+      default:
+        return ''
+    }
+  }
+
+  const getDaySuffix = (day) => {
+    if (day > 3 && day < 21) return 'th'
+    switch (day % 10) {
+      case 1:
+        return 'st'
+      case 2:
+        return 'nd'
+      case 3:
+        return 'rd'
+      default:
+        return 'th'
+    }
+  }
+
   const handleCreate = async (e) => {
     e.preventDefault()
     setErrors([])
@@ -226,7 +277,7 @@ export default function RecurringBills() {
           <div className="total-bills-card">
             <div className="bill-icon-box">🧾</div>
             <p>Total Bills</p>
-            <h2>$384.98</h2>
+            <h2>${totalBillsAmount.toFixed(2)}</h2>
           </div>
 
           <div className="summary-box">
@@ -234,21 +285,25 @@ export default function RecurringBills() {
 
             <div className="summary-row">
               <span>Paid Bills</span>
-              <strong>4 ($190.00)</strong>
+              <strong>
+                {paidBills.length} (${paidAmount.toFixed(2)})
+              </strong>
             </div>
 
             <div className="divider" />
 
             <div className="summary-row">
               <span>Total Upcoming</span>
-              <strong>4 ($194.98)</strong>
+              <strong>
+                {upcomingBills.length} (${upcomingAmount.toFixed(2)})
+              </strong>
             </div>
 
             <div className="divider" />
 
             <div className="summary-row danger">
               <span>Due Soon</span>
-              <strong>2 ($59.98)</strong>
+              {dueBills.length} (${dueAmount.toFixed(2)})
             </div>
           </div>
         </div>
@@ -256,12 +311,40 @@ export default function RecurringBills() {
         <div className="bills-table-card">
           <div className="bills-filters">
             <input placeholder="Search bills" />
-            <div>
-              <span>Sort by</span>
-              <select>
-                <option>Latest</option>
-                <option>Oldest</option>
-              </select>
+            <div className="sort-wrapper" ref={sortRef}>
+              <span className="sort-label">Sort by</span>
+
+              <button
+                className="sort-btn"
+                onClick={() => setSortOpen((o) => !o)}
+              >
+                {sortValue}
+                <span className="caret">▾</span>
+              </button>
+
+              {sortOpen && (
+                <div className="sort-menu">
+                  {[
+                    'Latest',
+                    'Oldest',
+                    'A to Z',
+                    'Z to A',
+                    'Highest',
+                    'Lowest',
+                  ].map((opt) => (
+                    <div
+                      key={opt}
+                      className={`sort-item ${opt === sortValue ? 'active' : ''}`}
+                      onClick={() => {
+                        setSortValue(opt)
+                        setSortOpen(false)
+                      }}
+                    >
+                      {opt}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -271,23 +354,36 @@ export default function RecurringBills() {
             <span className="amount-col">Amount</span>
           </div>
 
-          {BILLS.map((bill, i) => (
-            <div className="bill-row" key={i}>
-              <div className="bill-left">
-                <div className={`bill-icon ${bill.status}`}>{bill.icon}</div>
+          {bills.length === 0 && (
+            <div style={{ padding: '20px', color: '#777' }}>
+              No recurring bills found
+            </div>
+          )}
 
-                <div>
-                  <div className="bill-name">{bill.name}</div>
+          {getSortedBills().map((bill) => {
+            const status = getBillStatus(bill)
+            const cycleText = getCycleText(bill)
+
+            return (
+              <div className="bill-row" key={bill.id}>
+                <div className="bill-left">
+                  <div className={`bill-icon ${status}`}>
+                    {status === 'paid' ? '✅' : status === 'due' ? '⏰' : '📅'}
+                  </div>
+
+                  <div>
+                    <div className="bill-name">{bill.name}</div>
+                  </div>
+                </div>
+
+                <div className={`bill-status ${status}`}>{cycleText}</div>
+
+                <div className={`bill-amount ${status}`}>
+                  ${Number(bill.amount).toFixed(2)}
                 </div>
               </div>
-
-              <div className={`bill-status ${bill.status}`}>{bill.cycle}</div>
-
-              <div className={`bill-amount ${bill.status}`}>
-                ${bill.amount.toFixed(2)}
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
 
