@@ -5,6 +5,9 @@ import '../transactions/Transactions.css'
 import { React, useEffect, useRef, useState } from 'react'
 
 import dayjs from 'dayjs'
+// import { CiEdit } from 'react-icons/ci'
+import { FaUndo } from 'react-icons/fa'
+import { MdOutlineAutoDelete } from 'react-icons/md'
 import Swal from 'sweetalert2'
 
 import CloseIcon from '@mui/icons-material/Close'
@@ -32,21 +35,29 @@ export default function Transactions() {
   const [sortOpen, setSortOpen] = useState(false)
   const [sortValue, setSortValue] = useState('Latest')
   const sortRef = useRef(null)
+  const [selectedTx, setSelectedTx] = useState(null)
 
   const [selectedCategory, setSelectedCategory] = useState('All')
+  const [selectedTransaction, setSelectedTransaction] = useState('null')
 
   const [open, setOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
+  const [undoOpen, setUndoOpen] = useState(false)
+
+  const fetchTransactions = async () => {
+    const data = await ApiService.fetchTransactionLists()
+    setTransactions(data)
+  }
+
+  const fetchBudgets = async () => {
+    const data = await ApiService.fetchBudgetLists()
+    setBudgets(data)
+  }
 
   useEffect(() => {
-    ApiService.fetchTransactionLists()
-      .then(setTransactions)
-      .catch(() => setError('Failed to load transactions'))
-
-    ApiService.fetchBudgetLists()
-      .then(setBudgets)
-      .catch(() => setError('Failed to load budgets'))
+    fetchTransactions()
+    fetchBudgets()
   }, [])
 
   useEffect(() => {
@@ -124,6 +135,8 @@ export default function Transactions() {
   const selectedBudget = budgets.find((b) => b.id === Number(form.budget_id))
   const isBudgetExhausted = selectedBudget && selectedBudget.remaining <= 0
 
+  const canModify = (tx) => dayjs().diff(dayjs(tx.created_at), 'hour') <= 24
+
   useEffect(() => {
     if (selectedBudget) {
       setForm((prev) => ({
@@ -134,6 +147,17 @@ export default function Transactions() {
   }, [form.budget_id])
 
   const [errors, setErrors] = useState([])
+
+  useEffect(() => {
+    if (editOpen && selectedTx) {
+      setForm({
+        amount: selectedTx.amount,
+        description: selectedTx.description,
+        date: selectedTx.date,
+        budget_id: selectedTx.budget_id || '',
+      })
+    }
+  }, [editOpen])
 
   const handleCreate = async (e) => {
     e.preventDefault()
@@ -158,6 +182,7 @@ export default function Transactions() {
         account_id: 1,
         budget_id: '',
       })
+      fetchTransactions()
 
       Swal.fire({
         icon: 'success',
@@ -169,8 +194,68 @@ export default function Transactions() {
       setError(err.errors || ['Transaction failed'])
     }
   }
-  const handleUpdate = async () => {}
-  const handleDelete = async () => {}
+  const handleUpdate = async () => {
+    try {
+      await ApiService.updateTransaction(selectedTx.id, {
+        ...form,
+        amount: Number(form.amount),
+      })
+
+      setEditOpen(false)
+      fetchTransactions()
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Transaction Updated',
+        confirmButtonColor: '#111318',
+      })
+    } catch {
+      Swal.fire({
+        icon: 'error',
+        title: 'Edit not allowed',
+        text: 'Editing allowed only within 24 hours',
+      })
+    }
+  }
+  const handleDelete = async () => {
+    try {
+      await ApiService.deleteTransaction(selectedTx.id)
+      setDeleteOpen(false)
+      fetchTransactions()
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Transaction Deleted',
+        confirmButtonColor: '#111318',
+      })
+    } catch {
+      Swal.fire({
+        icon: 'error',
+        title: 'Delete not allowed',
+        text: 'Delete allowed only within 24 hours',
+      })
+    }
+  }
+
+  const handleUndo = async () => {
+    try {
+      await ApiService.undoTransaction(selectedTx.id)
+      setUndoOpen(false)
+      fetchTransactions()
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Transaction Undone',
+        confirmButtonColor: '#111318',
+      })
+    } catch {
+      Swal.fire({
+        icon: 'error',
+        title: 'Undo not allowed',
+        text: 'Undo allowed only within 24 hours',
+      })
+    }
+  }
 
   return (
     <div className="transactions-page">
@@ -240,24 +325,63 @@ export default function Transactions() {
           <span>Category</span>
           <span>Transaction Date</span>
           <span className="amount-col">Amount</span>
+          <span className="amount-col-action">Actions</span>
         </div>
 
-        {currentData.map((tx) => (
-          <div className="table-row" key={tx.id}>
-            <span className="name">
-              <span className="avatar">{tx.user_name?.charAt(0)}</span>
-              {tx.user_name}
-            </span>
+        {transactions.map((tx) => {
+          const isDisabled = tx.undone === true
 
-            <span>{tx.category || 'Uncategorized'}</span>
+          return (
+            <div
+              className={`table-row ${isDisabled ? 'row-disabled' : ''}`}
+              key={tx.id}
+            >
+              <span className="name">
+                <span className="avatar">{tx.user_name?.charAt(0)}</span>
+                {tx.user_name}
+              </span>
+              <span>{tx.category || 'Uncategorized'}</span>
+              <span>{dayjs(tx.date).format('DD MMM YYYY')}</span>
 
-            <span>{dayjs(tx.date).format('DD MMM YYYY')}</span>
+              <span className={`amount ${tx.amount > 0 ? 'plus' : 'minus'}`}>
+                {tx.amount > 0 ? '+' : '-'}${Math.abs(tx.amount).toFixed(2)}
+                {tx.undone && <small className="undone-badge">UNDONE</small>}
+              </span>
 
-            <span className={`amount ${tx.amount > 0 ? 'plus' : 'minus'}`}>
-              {tx.amount > 0 ? '+' : '-'}${Math.abs(tx.amount).toFixed(2)}
-            </span>
-          </div>
-        ))}
+              <div className="tx-actions">
+                {/* <a
+                disabled={!canModify(tx)}
+                onClick={() => {
+                  setSelectedTx(tx)
+                  setEditOpen(true)
+                }}
+              >
+                <CiEdit />
+              </a> */}
+
+                <a
+                  disabled={isDisabled || !canModify(tx)}
+                  onClick={() => {
+                    setSelectedTx(tx)
+                    setDeleteOpen(true)
+                  }}
+                >
+                  <MdOutlineAutoDelete />
+                </a>
+
+                <a
+                  disabled={isDisabled || !canModify(tx)}
+                  onClick={() => {
+                    setSelectedTx(tx)
+                    setUndoOpen(true)
+                  }}
+                >
+                  <FaUndo />
+                </a>
+              </div>
+            </div>
+          )
+        })}
 
         <div className="pagination">
           <div>
@@ -309,7 +433,7 @@ export default function Transactions() {
         }}
         PaperProps={{
           sx: {
-            width: { xs: '90%', sm: '480px' },
+            width: { xs: '90%', sm: '580px' },
             maxWidth: '480px',
             maxHeight: '480px',
             borderRadius: '14px',
@@ -443,6 +567,167 @@ export default function Transactions() {
           </DialogContent>
         </div>
       </Dialog>
+
+      {/* ===== DELETE BUDGET MODAL ===== */}
+      <Dialog
+        open={deleteOpen}
+        onClose={(event, reason) => {
+          if (reason === 'backdropClick') return
+          setDeleteOpen(false)
+        }}
+        BackdropProps={{
+          sx: {
+            backgroundColor: 'rgba(0,0,0,0.45)',
+            backdropFilter: 'blur(2px)',
+          },
+        }}
+        PaperProps={{
+          sx: {
+            width: { xs: '90%', sm: '480px' },
+            maxWidth: '480px',
+            borderRadius: '14px',
+          },
+        }}
+      >
+        <div className="transaction-modal">
+          <div className="transaction-delete-modal-header">
+            <h2>Delete ‘{selectedTransaction?.title}’?</h2>
+            <IconButton onClick={() => setDeleteOpen(false)}>
+              <CloseIcon />
+            </IconButton>
+          </div>
+
+          <p className="transaction-delete-modal-desc">
+            Are you sure you want to delete this Transaction? This action cannot
+            be reversed, and all the data inside it will be removed forever.
+          </p>
+
+          <DialogContent>
+            <div className="transaction-delete-form">
+              <Button
+                fullWidth
+                onClick={handleDelete}
+                sx={{
+                  background: '#c0392b',
+                  color: '#fff',
+                  '&:hover': { background: '#a93226' },
+                  mt: 2,
+                  textTransform: 'none',
+                }}
+              >
+                Yes, Confirm Deletion
+              </Button>
+
+              <Button
+                fullWidth
+                variant="text"
+                onClick={() => setDeleteOpen(false)}
+                sx={{
+                  textTransform: 'none',
+                }}
+              >
+                No, Go Back
+              </Button>
+            </div>
+          </DialogContent>
+        </div>
+      </Dialog>
+
+      {/* ===== UNDO TRANSACTION MODAL ===== */}
+      <Dialog
+        open={undoOpen}
+        onClose={(event, reason) => {
+          if (reason === 'backdropClick') return
+          setUndoOpen(false)
+        }}
+        BackdropProps={{
+          sx: {
+            backgroundColor: 'rgba(0,0,0,0.45)',
+            backdropFilter: 'blur(2px)',
+          },
+        }}
+        PaperProps={{
+          sx: {
+            width: { xs: '90%', sm: '480px' },
+            maxWidth: '480px',
+            borderRadius: '14px',
+          },
+        }}
+      >
+        <div className="transaction-modal">
+          <div className="transaction-delete-modal-header">
+            <h2>Undo ‘{selectedTransaction?.category}’?</h2>
+            <IconButton onClick={() => setUndoOpen(false)}>
+              <CloseIcon />
+            </IconButton>
+          </div>
+
+          <p className="transaction-delete-modal-desc">
+            This will revert account and budget amounts.
+          </p>
+
+          <DialogContent>
+            <div className="transaction-delete-form">
+              <Button
+                fullWidth
+                onClick={handleUndo}
+                sx={{
+                  background: '#c0392b',
+                  color: '#fff',
+                  '&:hover': { background: '#a93226' },
+                  mt: 2,
+                  textTransform: 'none',
+                }}
+              >
+                Yes, Confirm Undo
+              </Button>
+
+              <Button
+                fullWidth
+                variant="text"
+                onClick={() => setUndoOpen(false)}
+                sx={{
+                  textTransform: 'none',
+                }}
+              >
+                No, Go Back
+              </Button>
+            </div>
+          </DialogContent>
+        </div>
+      </Dialog>
+
+      {/* <Dialog open={undoOpen} onClose={() => setUndoOpen(false)}>
+        <DialogContent>
+          <h3>Undo Transaction</h3>
+          <p>This will revert account and budget amounts.</p>
+
+          <Button
+            variant="contained"
+            onClick={async () => {
+              try {
+                await ApiService.undoTransaction(selectedTx.id)
+                fetchTransactions()
+                setUndoOpen(false)
+
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Transaction Undone',
+                  confirmButtonColor: '#111318',
+                })
+              } catch {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Undo not allowed',
+                  text: 'Undo allowed only within 24 hours',
+                })
+              }
+            }}
+          >
+            Confirm Undo
+          </Button>
+        </DialogContent>
+      </Dialog> */}
     </div>
   )
 }

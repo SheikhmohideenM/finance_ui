@@ -111,6 +111,11 @@
   font-weight: 600;
 }
 
+.amount-col-action {
+  text-align: center;
+  font-weight: 600;
+}
+
 .plus {
   color: #0f766e;
 }
@@ -855,4 +860,220 @@
 
 ::-webkit-scrollbar-track {
   background: transparent !important;
+}
+
+/* ================= ACTIONS ================= */
+
+.tx-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.tx-actions button {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.tx-actions button:hover {
+  background: #f5f5f5;
+}
+
+.tx-actions button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ================= BASE ================= */
+
+.transactions-page {
+  padding: 24px;
+}
+
+.transactions-headers {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.transactions-headers h1 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.add-transactions-btn {
+  background: #18191e;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.add-transactions-btn:hover {
+  opacity: 0.9;
+}
+
+/* ================= TABLE ================= */
+
+.table-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+  font-size: 13px;
+  color: #777;
+  padding-bottom: 10px;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+  align-items: center;
+  padding: 14px 0;
+  border-top: 1px solid #f0f0f0;
+  font-size: 14px;
+}
+
+/* ================= AMOUNT ================= */
+
+.amount {
+  text-align: right;
+  font-weight: 600;
+}
+
+.plus {
+  color: #0f766e;
+}
+
+.minus {
+  color: #b91c1c;
+}
+
+/* ================= ACTIONS ================= */
+
+.tx-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.tx-actions button {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.tx-actions a {
+  background: #fff;
+  /* border: 1px solid #ddd; */
+  padding: 6px 10px;
+  font-size: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.tx-actions a:hover {
+  background: #f5f5f5;
+}
+
+.tx-actions a:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ================= FORMS ================= */
+
+.transaction-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+/* ================= MODALS ================= */
+
+.MuiDialog-paper {
+  border-radius: 14px !important;
+}
+
+.transaction-modal {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.row-disabled {
+  opacity: 0.45;
+  background: #f5f5f5;
+  pointer-events: none;
+}
+
+.tx-actions button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.undone-badge {
+  margin-left: 6px;
+  font-size: 10px;
+  color: #c0392b;
+  font-weight: 600;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 768px) {
+  .transactions-page {
+    padding: 12px;
+  }
+
+  .table-header {
+    display: none;
+  }
+
+  .table-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+    margin-bottom: 12px;
+  }
+
+  .table-row span {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .table-row span::before {
+    content: attr(data-label);
+    font-size: 12px;
+    color: #777;
+  }
+
+  .amount {
+    justify-content: flex-end;
+  }
+
+  .tx-actions {
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+
+  .tx-actions button {
+    flex: 1;
+  }
 }

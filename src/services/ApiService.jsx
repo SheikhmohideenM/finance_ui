@@ -184,5 +184,34 @@ const ApiService = {
       handleError(error, 'Failed to Create Transaction')
     }
   },
+
+  updateTransaction: async (id, transactionData) => {
+    try {
+      const res = await apiClient.put(`/transactions/${id}`, {
+        transaction: transactionData,
+      })
+      return res.data
+    } catch (e) {
+      handleError(e, 'Failed to update transactions')
+    }
+  },
+
+  deleteTransaction: async (id) => {
+    try {
+      await apiClient.delete(`/transactions/${id}`)
+      return true
+    } catch (e) {
+      handleError(e, 'Failed to delete transactions')
+    }
+  },
+
+  undoTransaction: async (id) => {
+    try {
+      await apiClient.post(`/transactions/${id}/undo`)
+      return true
+    } catch (e) {
+      handleError(e, 'Failed to undo transactions')
+    }
+  },
 }
 export default ApiService
