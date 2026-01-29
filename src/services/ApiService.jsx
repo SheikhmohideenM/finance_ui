@@ -61,7 +61,9 @@ const ApiService = {
 
   createBudget: async (budgetData) => {
     try {
-      const response = await apiClient.post('/budgets', budgetData)
+      const response = await apiClient.post('/budgets', {
+        budget: budgetData,
+      })
       return response.data
     } catch (error) {
       handleError(error, 'Failed to create budget')
