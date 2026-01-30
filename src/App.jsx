@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
-import Login from './components/login/login'
+import Login from './components/login/Login'
 import ProtectedRoute from './components/protected/ProtectedRoute'
 import SignUp from './components/signup/Signup'
 import Dashboard from './dashboard/dashboard'
