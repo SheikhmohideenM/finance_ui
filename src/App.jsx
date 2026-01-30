@@ -1,16 +1,24 @@
-import { useEffect, useState } from 'react'
+import {
+  useEffect,
+  useState,
+} from 'react';
 
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+} from 'react-router-dom';
 
-import Login from './components/login/Login'
-import ProtectedRoute from './components/protected/ProtectedRoute'
-import SignUp from './components/signup/Signup'
-import Dashboard from './dashboard/dashboard'
-import DashboardLayout from './dashboard/DashboardLayout'
-import Budget from './layout/budget/Budget'
-import Pots from './layout/pots/Pots'
-import RecurringBills from './layout/recurringBills/RecurringBills'
-import Transactions from './transactions/Transactions'
+import Login from './components/login/Login';
+import ProtectedRoute from './components/protected/ProtectedRoute';
+import SignUp from './components/signup/SignUp';
+import Dashboard from './dashboard/dashboard';
+import DashboardLayout from './dashboard/DashboardLayout';
+import Budget from './layout/budget/Budget';
+import Pots from './layout/pots/Pots';
+import RecurringBills from './layout/recurringBills/RecurringBills';
+import Transactions from './transactions/Transactions';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
