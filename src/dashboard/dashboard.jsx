@@ -23,12 +23,8 @@ export default function Dashboard() {
           </div>
         </section>
 
-        {/* GRID AREA */}
         <section className="grid">
-          {/* LEFT COLUMN */}
           <div className="left-col">
-            {/* POTS */}
-            {/* POTS */}
             <div className="card-box">
               <div className="card-header">
                 <h3>Pots</h3>
@@ -38,7 +34,6 @@ export default function Dashboard() {
               </div>
 
               <div className="pots-wrapper">
-                {/* TOTAL SAVED */}
                 <div className="pots-total">
                   <div className="pots-icon">💰</div>
                   <div>
@@ -47,7 +42,6 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                {/* POTS LIST */}
                 <div className="pots-list">
                   <div className="pot-item">
                     <span className="pot-bar green"></span>
@@ -84,7 +78,6 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* TRANSACTIONS */}
             <div className="card-box">
               <div className="card-header">
                 <h3>Transactions</h3>
@@ -112,9 +105,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* RIGHT COLUMN */}
           <div className="right-col">
-            {/* BUDGETS */}
             <div className="card-box">
               <div className="card-header">
                 <h3>Budgets</h3>
