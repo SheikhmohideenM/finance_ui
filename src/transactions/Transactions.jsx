@@ -31,13 +31,16 @@ export default function Transactions() {
   const [transactions, setTransactions] = useState([])
   const [budgets, setBudgets] = useState([])
   const [error, setError] = useState(null)
+  const sortRef = useRef(null)
 
   const [sortOpen, setSortOpen] = useState(false)
   const [sortValue, setSortValue] = useState('Latest')
-  const sortRef = useRef(null)
+  const [sortCategoryOpen, setSortCategoryOpen] = useState(false)
+  const [sortCategoryValue, setSortCategoryValue] = useState('All Transactions')
+
   const [selectedTx, setSelectedTx] = useState(null)
 
-  const [selectedCategory, setSelectedCategory] = useState('All')
+  const [selectedCategory, setSelectedCategory] = useState('All Transactions')
   const [selectedTransaction, setSelectedTransaction] = useState('null')
 
   const [open, setOpen] = useState(false)
@@ -70,10 +73,13 @@ export default function Transactions() {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
-  const categoryOptions = ['All', ...new Set(budgets.map((b) => b.category))]
+  const categoryOptions = [
+    'All Transactions',
+    ...new Set(budgets.map((b) => b.category)),
+  ]
 
   const filteredTransactions =
-    selectedCategory === 'All'
+    selectedCategory === 'All Transactions'
       ? transactions
       : transactions.filter((t) => t.category === selectedCategory)
 
@@ -103,7 +109,7 @@ export default function Transactions() {
   }
 
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 10
+  const itemsPerPage = 5
   const sortedTransactions = getSortedTransactions()
 
   const totalPages = Math.ceil(sortedTransactions.length / itemsPerPage)
@@ -268,55 +274,75 @@ export default function Transactions() {
 
       <div className="table-card">
         <div className="table-filters">
-          <input placeholder="Search transaction" />
+          <input className="search-input" placeholder="Search transaction" />
 
-          <div className="sort-wrapper" ref={sortRef}>
-            <span>Sort by</span>
-            <button className="sort-btn" onClick={() => setSortOpen((o) => !o)}>
-              {sortValue} ▾
-            </button>
+          <div className="filters-actions">
+            <div className="sort-wrapper" ref={sortRef}>
+              <span className="sort-label">Sort by</span>
+              <button
+                className="sort-btn"
+                onClick={() => setSortOpen((o) => !o)}
+              >
+                {sortValue} ▾
+              </button>
 
-            {sortOpen && (
-              <div className="sort-menu">
-                {[
-                  'Latest',
-                  'Oldest',
-                  'A to Z',
-                  'Z to A',
-                  'Highest',
-                  'Lowest',
-                ].map((opt) => (
-                  <div
-                    key={opt}
-                    className={`sort-item ${opt === sortValue ? 'active' : ''}`}
-                    onClick={() => {
-                      setSortValue(opt)
-                      setCurrentPage(1)
-                      setSortOpen(false)
-                    }}
-                  >
-                    {opt}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+              {sortOpen && (
+                <div className="sort-menu">
+                  {[
+                    'Latest',
+                    'Oldest',
+                    'A to Z',
+                    'Z to A',
+                    'Highest',
+                    'Lowest',
+                  ].map((opt) => (
+                    <div
+                      key={opt}
+                      className={`sort-item ${opt === sortValue ? 'active' : ''}`}
+                      onClick={() => {
+                        setSortValue(opt)
+                        setCurrentPage(1)
+                        setSortOpen(false)
+                      }}
+                    >
+                      {opt}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
-          <div className="filters-right">
-            <span>Category</span>
-            <select
-              value={selectedCategory}
-              onChange={(e) => {
-                setSelectedCategory(e.target.value)
-                setCurrentPage(1)
-              }}
-            >
-              {categoryOptions.map((c) => (
-                <option key={c} value={c}>
-                  {c.charAt(0).toUpperCase() + c.slice(1)}
-                </option>
-              ))}
-            </select>
+            <div className="sort-wrapper">
+              <span className="sort-label">Category</span>
+
+              <button
+                className="sort-btn"
+                onClick={() => setSortCategoryOpen((o) => !o)}
+              >
+                {sortCategoryValue} ▾
+              </button>
+
+              {sortCategoryOpen && (
+                <div className="sort-menu">
+                  {categoryOptions.map((c) => (
+                    <div
+                      key={c}
+                      className={`sort-item ${
+                        c === sortCategoryValue ? 'active' : ''
+                      }`}
+                      onClick={() => {
+                        setSortCategoryValue(c)
+                        setSelectedCategory(c)
+                        setCurrentPage(1)
+                        setSortCategoryOpen(false)
+                      }}
+                    >
+                      {c.charAt(0).toUpperCase() + c.slice(1)}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -328,7 +354,7 @@ export default function Transactions() {
           <span className="amount-col-action">Actions</span>
         </div>
 
-        {transactions.map((tx) => {
+        {currentData.map((tx) => {
           const isDisabled = tx.undone === true
 
           return (
