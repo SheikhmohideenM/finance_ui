@@ -139,8 +139,9 @@ body {
 
 .see-details {
   cursor: pointer;
-  font-size: 13px;
+  font-size: 14px;
   color: #777;
+  text-decoration: auto;
 }
 
 .pots-wrapper {
@@ -156,7 +157,7 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
-  min-width: 260px;
+  min-width: 280px;
 }
 
 .pots-icon {
@@ -405,7 +406,11 @@ body {
   }
 
   .pots-list {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .summary-list-dashboard {
+    grid-template-columns: 1fr 1fr;
   }
 
   .budget-circle {
@@ -431,4 +436,276 @@ body {
   body {
     overflow-y: auto;
   }
+}
+
+/* .donut-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+} */
+
+.summary-list-dashboard {
+  list-style: none;
+  padding: 0;
+  margin: -25px 0px 0px 5px;
+}
+
+.summary-list-dashboard li {
+  display: grid;
+  grid-template-columns: 4px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid #f1f1f1;
+  font-size: 14px;
+}
+
+.summary-list-dashboard li:last-child {
+  border-bottom: none;
+}
+
+.bar {
+  width: 4px;
+  height: 24px;
+  border-radius: 4px;
+}
+
+.bar.green {
+  background: #1f7a6d;
+}
+.bar.blue {
+  background: #2f80ed;
+}
+.bar.orange {
+  background: #f2994a;
+}
+.bar.purple {
+  background: #9b51e0;
+}
+.bar.yellow {
+  background: #f2c94c;
+}
+.bar.cyan {
+  background: #56ccf2;
+}
+.bar.navy {
+  background: #1f2a44;
+}
+.bar.red {
+  background: #eb5757;
+}
+.bar.turquoise {
+  background: #2dd4bf;
+}
+.bar.brown {
+  background: #8d6e63;
+}
+.bar.magenta {
+  background: #d63384;
+}
+.bar.navyGrey {
+  background: #6b7280;
+}
+.bar.armyGreen {
+  background: #6b8e23;
+}
+.bar.pink {
+  background: #f472b6;
+}
+.bar.gold {
+  background: #d4af37;
+}
+
+.budgetLabel {
+  color: #555;
+}
+
+.value {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.value strong {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111;
+}
+
+.value em {
+  font-style: normal;
+  font-size: 13px;
+  color: #777;
+  margin-left: 4px;
+}
+
+/* ===== BUDGET CARD LAYOUT ===== */
+
+.budget-content {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  /* gap: 24px; */
+  /* align-items: center; */
+}
+
+.donut-wrapper-dashboard {
+  display: flex;
+  justify-content: center;
+}
+
+.summary-wrapper h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .budget-content {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .donut-wrapper-dashboard {
+    justify-content: center;
+  }
+
+  .summary-wrapper h3 {
+    text-align: center;
+  }
+}
+
+.transactions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
+}
+
+/* LEFT */
+.tx-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tx-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.tx-avatar.circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #fff;
+}
+
+.circle.brown {
+  background: #8d6e63;
+}
+
+.circle.gold {
+  background: #d4af37;
+}
+
+.tx-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+}
+
+/* RIGHT */
+.tx-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tx-amount {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tx-amount.plus {
+  color: #0f766e;
+}
+
+.tx-amount.minus {
+  color: #b91c1c;
+}
+
+.tx-date {
+  font-size: 12px;
+  color: #777;
+}
+
+/* ================= RECURRING BILLS ================= */
+
+.bills-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bill-item {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 15px 25px 15px;
+  background: #f8f4ee;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+/* LEFT COLOR BAR */
+.bill-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 4px;
+  border-radius: 4px;
+}
+
+/* LABEL */
+.bill-label {
+  color: #555;
+  font-weight: 500;
+}
+
+/* AMOUNT */
+.bill-amount {
+  font-weight: 700;
+  color: #111;
+}
+
+/* STATUS COLORS */
+.bill-item.paid::before {
+  background: #1f7a6d;
+}
+
+.bill-item.upcoming::before {
+  background: #f2b880;
+}
+
+.bill-item.due::before {
+  background: #56ccf2;
 }

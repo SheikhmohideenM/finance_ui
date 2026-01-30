@@ -75,7 +75,7 @@
   overflow: hidden;
 }
 
-.progress-fill {
+.pot-bar {
   height: 100%;
   border-radius: 999px;
 }
@@ -125,19 +125,19 @@
   background: #6b7280;
 }
 
-.progress-fill.green {
+.pot-bar.green {
   background: #1f7a6d;
 }
-.progress-fill.blue {
+.pot-bar.blue {
   background: #7ccad6;
 }
-.progress-fill.orange {
+.pot-bar.orange {
   background: #f2b880;
 }
-.progress-fill.purple {
+.pot-bar.purple {
   background: #7c5fcf;
 }
-.progress-fill.gray {
+.pot-bar.gray {
   background: #6b7280;
 }
 
@@ -310,7 +310,7 @@
   margin-top: 6px;
 }
 
-.progress-fill.danger {
+.pot-bar.danger {
   background: #c0392b;
 }
 
@@ -325,4 +325,50 @@
 
 .submit-pot-btn.danger:hover {
   background: #111827;
+}
+
+.pot-bar.green {
+  background: #1f7a6d;
+}
+.pot-bar.blue {
+  background: #2f80ed;
+}
+.pot-bar.orange {
+  background: #f2994a;
+}
+.pot-bar.purple {
+  background: #9b51e0;
+}
+.pot-bar.yellow {
+  background: #f2c94c;
+}
+.pot-bar.cyan {
+  background: #56ccf2;
+}
+.pot-bar.navy {
+  background: #1f2a44;
+}
+.pot-bar.red {
+  background: #eb5757;
+}
+.pot-bar.turquoise {
+  background: #2dd4bf;
+}
+.pot-bar.brown {
+  background: #8d6e63;
+}
+.pot-bar.magenta {
+  background: #d63384;
+}
+.pot-bar.navyGrey {
+  background: #6b7280;
+}
+.pot-bar.armyGreen {
+  background: #6b8e23;
+}
+.pot-bar.pink {
+  background: #f472b6;
+}
+.pot-bar.gold {
+  background: #d4af37;
 }

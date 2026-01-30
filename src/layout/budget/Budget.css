@@ -40,7 +40,10 @@
 .donut-wrapper {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+  margin-top: 20px;
 }
 
 .donut {
