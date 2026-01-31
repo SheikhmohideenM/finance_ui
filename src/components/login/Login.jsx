@@ -5,31 +5,34 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import illustration from '../../assets/finance.svg'
+import AuthenticationApiService from '../../services/AuthenticationApiService'
 
 export default function Login({ onLogin }) {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  const navigate = useNavigate() // 🔥 ADD THIS
+  const navigate = useNavigate()
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  })
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    if (!name) return
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
 
-    const res = await fetch('http://localhost:3000/login', {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    })
-
-    if (res.ok) {
+    try {
+      await AuthenticationApiService.login(formData)
       onLogin && onLogin()
-      navigate('/dashboard') // 🔥 THIS WAS MISSING
-    } else {
-      const data = await res.json()
-      setError(data.error || 'Login failed')
+      navigate('/dashboard')
+    } catch (err) {
+      setError(err?.response?.data?.error || 'Login failed')
     }
   }
 
@@ -57,16 +60,18 @@ export default function Login({ onLogin }) {
             <label>Email</label>
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               required
             />
 
             <label>Password</label>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               required
             />
 

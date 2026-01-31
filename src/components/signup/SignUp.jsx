@@ -6,29 +6,32 @@ import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
 import illustration from '../../assets/finance.svg'
+import AuthenticationApiService from '../../services/AuthenticationApiService'
 
 export default function SignUp({ onSignup }) {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [errors, setErrors] = useState([])
 
   const navigate = useNavigate()
+
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+  })
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    if (!name) return
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
     setErrors([])
 
-    const res = await fetch('http://localhost:3000/signup', {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password }),
-    })
+    try {
+      await AuthenticationApiService.signup(formData)
 
-    const data = await res.json()
-
-    if (res.ok) {
       Swal.fire({
         icon: 'success',
         title: 'Registration Successful',
@@ -38,8 +41,14 @@ export default function SignUp({ onSignup }) {
         onSignup && onSignup()
         navigate('/login')
       })
-    } else {
-      setErrors(data.errors || 'Signup failed')
+    } catch (err) {
+      if (Array.isArray(err.errors)) {
+        setErrors(err.errors)
+      } else if (err.error) {
+        setErrors([err.error])
+      } else {
+        setErrors(['Signup failed'])
+      }
     }
   }
 
@@ -73,24 +82,27 @@ export default function SignUp({ onSignup }) {
             <label>Name</label>
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
               required
             />
 
             <label>Email</label>
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               required
             />
 
             <label>Create Password</label>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               required
             />
             <small>Password must be at least 8 characters</small>
