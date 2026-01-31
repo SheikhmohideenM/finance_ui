@@ -1,7 +1,6 @@
 import axios from 'axios'
 
-// const API_BASE_URL = import.meta.env.local.VITE_API_URL_LOCAL
-const API_BASE_URL = import.meta.env.VITE_API_URL_PRODUCTION
+const API_BASE_URL = import.meta.env.VITE_API_URL
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -27,10 +26,13 @@ const apiClient = axios.create({
 /* ================= CSRF-TOKEN ================= */
 apiClient.interceptors.request.use(
   (config) => {
-    const csrfToken = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('CSRF-TOKEN='))
-      ?.split('=')[1]
+    // const csrfToken = document.cookie
+    //   .split('; ')
+    //   .find((row) => row.startsWith('CSRF-TOKEN='))
+    //   ?.split('=')[1]
+    const csrfToken = document
+      .querySelector('meta[name="csrf-token"]')
+      ?.getAttribute('content')
 
     if (csrfToken) {
       config.headers['X-CSRF-Token'] = csrfToken
