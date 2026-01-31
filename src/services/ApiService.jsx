@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-// const API_BASE_URL = 'http://localhost:3000/api/v1' //for local
-const API_BASE_URL = import.meta.env.VITE_API_URL_API
+// const API_BASE_URL = import.meta.env.local.VITE_API_URL_LOCAL
+const API_BASE_URL = import.meta.env.production.VITE_API_URL_PRODUCTION
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -53,7 +53,7 @@ const ApiService = {
   /* ================= Budget ================= */
   fetchBudgetLists: async () => {
     try {
-      const response = await apiClient.get('/budgets')
+      const response = await apiClient.get('/api/v1/budgets')
       return response.data
     } catch (error) {
       handleError(error, 'Failed to load budgets')
@@ -62,7 +62,7 @@ const ApiService = {
 
   createBudget: async (budgetData) => {
     try {
-      const response = await apiClient.post('/budgets', {
+      const response = await apiClient.post('/api/v1/budgets', {
         budget: budgetData,
       })
       return response.data
@@ -73,7 +73,7 @@ const ApiService = {
 
   updateBudget: async (id, budget) => {
     try {
-      const res = await apiClient.put(`/budgets/${id}`, { budget })
+      const res = await apiClient.put(`/api/v1/budgets/${id}`, { budget })
       return res.data
     } catch (e) {
       handleError(e, 'Failed to update budget')
@@ -82,7 +82,7 @@ const ApiService = {
 
   deleteBudget: async (id) => {
     try {
-      await apiClient.delete(`/budgets/${id}`)
+      await apiClient.delete(`/api/v1/budgets/${id}`)
       return true
     } catch (e) {
       handleError(e, 'Failed to delete budget')
@@ -92,7 +92,7 @@ const ApiService = {
   /* ================= Pot ================= */
   fetchPotsLists: async () => {
     try {
-      const response = await apiClient.get('/pots')
+      const response = await apiClient.get('/api/v1/pots')
       return response.data
     } catch (error) {
       handleError(error, 'Failed to load pots')
@@ -101,7 +101,7 @@ const ApiService = {
 
   createPot: async (potData) => {
     try {
-      const response = await apiClient.post('/pots', potData)
+      const response = await apiClient.post('/api/v1/pots', potData)
       return response.data
     } catch (error) {
       handleError(error, 'Failed to create pot')
@@ -110,7 +110,7 @@ const ApiService = {
 
   updatePot: async (id, pot) => {
     try {
-      const res = await apiClient.put(`/pots/${id}`, { pot })
+      const res = await apiClient.put(`/api/v1/pots/${id}`, { pot })
       return res.data
     } catch (e) {
       handleError(e, 'Failed to update pot')
@@ -119,7 +119,7 @@ const ApiService = {
 
   deletePot: async (id) => {
     try {
-      await apiClient.delete(`/pots/${id}`)
+      await apiClient.delete(`/api/v1/pots/${id}`)
       return true
     } catch (e) {
       handleError(e, 'Failed to delete pot')
@@ -128,7 +128,9 @@ const ApiService = {
 
   addMoney: async (id, amount) => {
     try {
-      const res = await apiClient.post(`/pots/${id}/add_money`, { amount })
+      const res = await apiClient.post(`/api/v1/pots/${id}/add_money`, {
+        amount,
+      })
       return res.data
     } catch (e) {
       handleError(e, 'Failed to add amount')
@@ -137,7 +139,9 @@ const ApiService = {
 
   withdrawMoney: async (id, amount) => {
     try {
-      const res = await apiClient.post(`/pots/${id}/withdraw`, { amount })
+      const res = await apiClient.post(`/api/v1/pots/${id}/withdraw`, {
+        amount,
+      })
       return res.data
     } catch (e) {
       handleError(e, 'Failed to withdraw amount')
@@ -147,7 +151,7 @@ const ApiService = {
   /* ================= Recurring Bills ================= */
   fetchBillsLists: async () => {
     try {
-      const response = await apiClient.get('/recurring_bills')
+      const response = await apiClient.get('/api/v1/recurring_bills')
       return response.data
     } catch (error) {
       handleError(error, 'Failed to load bills')
@@ -156,7 +160,7 @@ const ApiService = {
 
   createBill: async (billData) => {
     try {
-      const response = await apiClient.post('/recurring_bills', {
+      const response = await apiClient.post('/api/v1/recurring_bills', {
         recurring_bill: billData,
       })
       return response.data
@@ -168,7 +172,7 @@ const ApiService = {
   /* ================= Transaction Bills ================= */
   fetchTransactionLists: async () => {
     try {
-      const response = await apiClient.get('/transactions')
+      const response = await apiClient.get('/api/v1/transactions')
       return response.data
     } catch (error) {
       handleError(error, 'Failed to load bills')
@@ -177,7 +181,7 @@ const ApiService = {
 
   createTransaction: async (transactionData) => {
     try {
-      const response = await apiClient.post('/transactions', {
+      const response = await apiClient.post('/api/v1/transactions', {
         transaction: transactionData,
       })
       return response.data
@@ -188,7 +192,7 @@ const ApiService = {
 
   updateTransaction: async (id, transactionData) => {
     try {
-      const res = await apiClient.put(`/transactions/${id}`, {
+      const res = await apiClient.put(`/api/v1/transactions/${id}`, {
         transaction: transactionData,
       })
       return res.data
@@ -199,7 +203,7 @@ const ApiService = {
 
   deleteTransaction: async (id) => {
     try {
-      await apiClient.delete(`/transactions/${id}`)
+      await apiClient.delete(`/api/v1/transactions/${id}`)
       return true
     } catch (e) {
       handleError(e, 'Failed to delete transactions')
@@ -208,7 +212,7 @@ const ApiService = {
 
   undoTransaction: async (id) => {
     try {
-      await apiClient.post(`/transactions/${id}/undo`)
+      await apiClient.post(`/api/v1/transactions/${id}/undo`)
       return true
     } catch (e) {
       handleError(e, 'Failed to undo transactions')
