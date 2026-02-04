@@ -2,14 +2,14 @@
   padding: 24px;
 }
 
-.budgets-header {
+.budgets-headers {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.budgets-header h1 {
+.budgets-headers h1 {
   font-size: 22px;
 }
 
@@ -568,10 +568,10 @@
     gap: 12px;
   }
 
-  .add-budget-btn {
+  /* .add-budget-btn {
     width: 100%;
     text-align: center;
-  }
+  } */
 
   .budgets-grid {
     grid-template-columns: 1fr;

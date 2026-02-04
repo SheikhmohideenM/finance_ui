@@ -242,7 +242,7 @@ export default function Budgets() {
 
   return (
     <div className="budgets-page">
-      <div className="budgets-header">
+      <div className="budgets-headers">
         <h1>Budgets</h1>
         <button className="add-budget-btn" onClick={handleClickOpen}>
           + Add New Budget
